@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kollaborator.web", "Kollaborator.web\Kollaborator.web.csproj", "{6E2EE087-F6BE-4DED-BBFE-82CCAE30496E}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Kolaborator.db", "Kolaborator.db\Kolaborator.db.sqlproj", "{1D6DE684-20B5-4817-B360-D622C961E57B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E2EE087-F6BE-4DED-BBFE-82CCAE30496E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E2EE087-F6BE-4DED-BBFE-82CCAE30496E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E2EE087-F6BE-4DED-BBFE-82CCAE30496E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E2EE087-F6BE-4DED-BBFE-82CCAE30496E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D6DE684-20B5-4817-B360-D622C961E57B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D6DE684-20B5-4817-B360-D622C961E57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D6DE684-20B5-4817-B360-D622C961E57B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1D6DE684-20B5-4817-B360-D622C961E57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D6DE684-20B5-4817-B360-D622C961E57B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D6DE684-20B5-4817-B360-D622C961E57B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
