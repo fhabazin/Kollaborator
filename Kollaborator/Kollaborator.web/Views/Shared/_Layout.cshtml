@@ -6,6 +6,12 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+  
+        
+        <script src="/Scripts/jquery-1.2.6.min.js"></script>
+        <script src="/Scripts/swfupload.js"></script>
+        <script src="/Scripts/jquery-asyncUpload-0.1.js"></script>
+   
 
 </head>
 <body>
@@ -24,6 +30,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Upload","FileUpload","Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

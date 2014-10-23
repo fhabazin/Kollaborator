@@ -26,5 +26,21 @@ namespace Kollaborator.web.Controllers
 
             return View();
         }
+        public ActionResult FileUpload()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public Guid FileUpload(HttpPostedFileBase photo)
+        {
+            string path = @"D:\Temp\";
+
+            if (photo != null)
+                photo.SaveAs(path + photo.FileName);
+
+            return new Guid();
+        }
     }
 }
