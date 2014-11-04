@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kollaborator.web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ namespace Kollaborator.web.Controllers
 {
     public class HomeController : Controller
     {
+        private IFileStore _fileStore = new DiskFileStore();
         public ActionResult Index()
         {
             return View();
@@ -28,19 +30,24 @@ namespace Kollaborator.web.Controllers
         }
         public ActionResult FileUpload()
         {
-            return View();
+            var file = Request.Files["Filedata"];
+
+            string savePath = Server.MapPath(@"~\Content\" + file.FileName);
+            file.SaveAs(savePath);
+            return Content(Url.Content(@"~\Content\" + file.FileName));
+            
         }
 
 
-        [HttpPost]
-        public Guid FileUpload(HttpPostedFileBase photo)
+        public Guid AsyncUpload()
         {
-            string path = @"D:\Temp\";
-
-            if (photo != null)
-                photo.SaveAs(path + photo.FileName);
-
-            return new Guid();
+            return _fileStore.SaveUploadedFile(Request.Files[0]);
+        }
+        
+        public ActionResult Upload()
+        {
+            return View();
+            
         }
     }
 }
