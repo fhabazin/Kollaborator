@@ -9,7 +9,7 @@ namespace Kollaborator.web.Controllers
 {
     public class HomeController : Controller
     {
-        private IFileStore _fileStore = new DiskFileStore();
+     
         public ActionResult Index()
         {
             return View();
@@ -30,19 +30,26 @@ namespace Kollaborator.web.Controllers
         }
         public ActionResult FileUpload()
         {
-            var file = Request.Files["Filedata"];
+            using (var ctx = new KollaboratorContext())
+            {
+                var file = Request.Files["Filedata"];
 
-            string savePath = Server.MapPath(@"~\Content\" + file.FileName);
-            file.SaveAs(savePath);
-            return Content(Url.Content(@"~\Content\" + file.FileName));
-            
+                string savePath = Server.MapPath(@"~\Content\" + file.FileName);
+                file.SaveAs(savePath);
+                FileModel fm = new FileModel()
+                {
+                    path = savePath,
+                    groupId = 11,
+                    uploadDate = DateTime.Now
+                };
+                ctx.files.Add(fm);
+                ctx.SaveChanges();
+                return Content(Url.Content(@"~\Content\" + file.FileName));
+            }
         }
 
 
-        public Guid AsyncUpload()
-        {
-            return _fileStore.SaveUploadedFile(Request.Files[0]);
-        }
+        
         
         public ActionResult Upload()
         {
