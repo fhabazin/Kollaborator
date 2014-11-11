@@ -7,16 +7,17 @@ using System.Web;
 
 namespace Kollaborator.web.Models
 {
-    public class FileModel
+    public class GroupModel
     {
-       
         [Key]
-        public String path { get; set; }
+        public int groupID {get; set;}
+
+        public String groupName { get; set;}
         [ForeignKey("")]
-        public int groupId { get; set; }
-        public DateTime uploadDate { get; set; }
+        public int creatorID { get; set; }
 
 
+   
 
     }
 }

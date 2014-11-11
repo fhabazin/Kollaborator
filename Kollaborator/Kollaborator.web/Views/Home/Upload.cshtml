@@ -1,37 +1,46 @@
-﻿
-@{
-    Layout = null;
-}
+﻿@Model = System.Collections.Generic.List<String>
+    @{
+        Layout = null;
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>::Uploadify Example::</title>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.uploadify.min.js")"></script>
-    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/uploadify.css")" />
-    <script type="text/javascript">
-        $(function () {
-            $('#file_upload').uploadify({
-                'swf': "@Url.Content("~/Scripts/uploadify.swf")",
-                //this is where the file posts when it uploads.
-                'uploader': "@Url.Action("FileUpload", "Home")",
-                'onUploadSuccess': function (file, data, response) {
-                    //data is whatever you return from the server
-                    //we're sending the URL from the server so we append this as an image to the #uploaded div
-                    $("#uploaded").append("<img src='" + data + "' alt='Uploaded Image' />");
-                }
+    }
+
+    <!DOCTYPE HTML>
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>::Uploadify Example::</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.uploadify.min.js")"></script>
+        <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/uploadify.css")" />
+        <script type="text/javascript">
+            $(function () {
+                $('#file_upload').uploadify({
+                    'swf': "@Url.Content("~/Scripts/uploadify.swf")",
+                    //this is where the file posts when it uploads.
+                    'uploader': "@Url.Action("FileUpload", "Home")",
+                    'onUploadSuccess': function (file, data, response) {
+                        //data is whatever you return from the server
+                        //we're sending the URL from the server so we append this as an image to the #uploaded div
+                        $("#uploaded").append("<img src='" + data + "' alt='Uploaded Image' />");
+                    }
+                });
             });
-        });
-    </script>
-</head>
-<body>
-    <div>
-        Click Select files to upload files.
-        <input type="file" name="file_upload" id="file_upload" />
-    </div>
-    <div id="uploaded">
-    </div>
-</body>
+
+        </script>
+    </head>
+    <body>
+        <div>
+            Click Select files to upload files.
+            <input type="file" name="file_upload" id="file_upload" />
+        </div>
+        <div id="uploaded">
+            @foreach (var path in Model)
+            {
+                <img src='@path'  alt='Uploaded Image' />
+            }
+
+
+
+        </div>
+    </body>
 </html>

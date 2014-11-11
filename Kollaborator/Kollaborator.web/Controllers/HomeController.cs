@@ -1,6 +1,7 @@
 ﻿using Kollaborator.web.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -53,7 +54,19 @@ namespace Kollaborator.web.Controllers
         
         public ActionResult Upload()
         {
-            return View();
+            using (var ctx = new KollaboratorContext())
+            {
+                
+                var query = ctx.files.Where(p => p.groupId == 11).
+                            OrderBy(p => p.uploadDate).Select(p => p.path).ToList();
+                List<String> paths = new List<String>();
+                foreach (String path in query)
+                {
+                    paths.Add(Url.Content(@"~\Content\"+ Path.GetFileName(path)));
+                }
+                return View(paths);
+            }
+            
             
         }
     }
