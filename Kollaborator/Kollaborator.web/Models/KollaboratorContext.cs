@@ -9,5 +9,10 @@ namespace Kollaborator.web.Models
     public class KollaboratorContext : DbContext
     {
         public DbSet<FileModel> files { get; set; }
+        public KollaboratorContext() 
+        : base("DefaultConnection") 
+    { 
+    } 
+   
     }
 }
