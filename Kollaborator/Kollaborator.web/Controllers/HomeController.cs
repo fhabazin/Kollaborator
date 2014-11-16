@@ -15,7 +15,10 @@ namespace Kollaborator.web.Controllers
         {
             return View();
         }
-
+        public ActionResult CreateGroup()
+        {
+            return View();
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
