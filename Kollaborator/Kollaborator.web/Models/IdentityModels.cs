@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity;
+using System.Collections.Generic;
+using Kollaborator.web.Models;
 
 namespace Kollaborator.web.Models
 {
@@ -15,10 +18,15 @@ namespace Kollaborator.web.Models
             // Add custom user claims here
             return userIdentity;
         }
+        public virtual ICollection<UserGroup> userGroups { get; set; }
+    }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<GroupModel> Groups { get; set; }
+        public DbSet<FileModel> files { get; set; }
+        public DbSet<UserGroup> userGroups { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -29,4 +37,3 @@ namespace Kollaborator.web.Models
             return new ApplicationDbContext();
         }
     }
-}

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model System.Collections.Generic.List <Kollaborator.web.Models.GroupModel>
+@{
     ViewBag.Title = "Kollaborator";
 }
 
@@ -11,6 +12,12 @@
         <a href="http://asp.net" class="btn btn-primary btn-lg">Join group</a>
         <a href="http://asp.net" class="btn btn-primary btn-lg">Ask others to join &raquo;</a>
     </p>
+    <div>
+        @foreach (var group in Model)
+        {
+            <a href="@Url.Action("Group")">@group.groupName</a><br/>
+        } 
+    </div>
 }
 else
 {  <h1>Kollaborator</h1>

@@ -101,6 +101,8 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -164,11 +166,36 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201411180956050_fixedContext.cs" />
+    <Compile Include="Migrations\201411180956050_fixedContext.Designer.cs">
+      <DependentUpon>201411180956050_fixedContext.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411181002304_fileType.cs" />
+    <Compile Include="Migrations\201411181002304_fileType.Designer.cs">
+      <DependentUpon>201411181002304_fileType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411181033511_usergroups.cs" />
+    <Compile Include="Migrations\201411181033511_usergroups.Designer.cs">
+      <DependentUpon>201411181033511_usergroups.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411181059411_userGroupEdited.cs" />
+    <Compile Include="Migrations\201411181059411_userGroupEdited.Designer.cs">
+      <DependentUpon>201411181059411_userGroupEdited.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411181148189_usergroup.cs" />
+    <Compile Include="Migrations\201411181148189_usergroup.Designer.cs">
+      <DependentUpon>201411181148189_usergroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411181223447_filemodeledit.cs" />
+    <Compile Include="Migrations\201411181223447_filemodeledit.Designer.cs">
+      <DependentUpon>201411181223447_filemodeledit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\GroupModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\KollaboratorContext.cs" />
+    <Compile Include="Models\UserGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -231,6 +258,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Upload.cshtml" />
     <Content Include="Views\Home\CreateGroup.cshtml" />
+    <Content Include="Views\Home\Group.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -245,6 +273,26 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201411180956050_fixedContext.resx">
+      <DependentUpon>201411180956050_fixedContext.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181002304_fileType.resx">
+      <DependentUpon>201411181002304_fileType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181033511_usergroups.resx">
+      <DependentUpon>201411181033511_usergroups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181059411_userGroupEdited.resx">
+      <DependentUpon>201411181059411_userGroupEdited.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181148189_usergroup.resx">
+      <DependentUpon>201411181148189_usergroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411181223447_filemodeledit.resx">
+      <DependentUpon>201411181223447_filemodeledit.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

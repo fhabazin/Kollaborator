@@ -15,25 +15,16 @@ namespace Kollaborator.web.Models
         private string s;
         [Key]
         public int groupID { get; set; }
-
+        public virtual ICollection<UserGroup> userGroups { get; set; }
         public String groupName { get; set; }
         [ForeignKey("")]
-        public int creatorID { get; set; }
-        public GroupModel(string p, int r, int s)
-        {
-            
-            this.groupID = r;
-            this.groupName = p;
-            this.creatorID = s;
-        }
+        public String creator { get; set; }
+       
+        public GroupModel()
+        { }
+       
        
     }
 
-    public class GroupModelContext:DbContext {
-        public DbSet<GroupModel> GroupModel { get; set; }
-        public GroupModelContext() 
-        : base("DefaultConnection") 
-    { 
-    } 
-        }
+    
 }

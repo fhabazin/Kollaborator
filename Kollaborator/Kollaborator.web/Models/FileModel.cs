@@ -15,7 +15,7 @@ namespace Kollaborator.web.Models
         [ForeignKey("")]
         public int groupId { get; set; }
         public DateTime uploadDate { get; set; }
-
+        public String FileType { get; set; }
 
 
     }
