@@ -1,0 +1,52 @@
+﻿@model Kollaborator.web.Models.GroupModel
+
+@{
+    ViewBag.Title = "CreateGroup";
+}
+
+<h2>Create Group</h2>
+
+
+@using (Html.BeginForm("SaveGroup","Home")) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+   
+            <h5>Make your own music group</h5>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+
+                @Html.LabelFor(model => model.groupName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control", @id = "groupName" } })
+                    @Html.ValidationMessageFor(model => model.groupName, "", new { @class = "text-danger" })
+                </div>
+      
+</div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.creatorID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.creatorID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.creatorID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+         
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Home", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

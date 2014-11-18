@@ -10,12 +10,15 @@ namespace Kollaborator.web.Controllers
 {
     public class HomeController : Controller
     {
-     
+
         public ActionResult Index()
         {
             return View();
         }
-
+        public ActionResult CreateGroup()
+        {
+            return View();
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -50,24 +53,45 @@ namespace Kollaborator.web.Controllers
         }
 
 
-        
-        
+
+
         public ActionResult Upload()
         {
             using (var ctx = new KollaboratorContext())
             {
-                
+
                 var query = ctx.files.Where(p => p.groupId == 11).
                             OrderBy(p => p.uploadDate).Select(p => p.path).ToList();
                 List<String> paths = new List<String>();
                 foreach (String path in query)
                 {
-                    paths.Add(Url.Content(@"~\Content\"+ Path.GetFileName(path)));
+                    paths.Add(Url.Content(@"~\Content\" + Path.GetFileName(path)));
                 }
                 return View(paths);
             }
-            
-            
+
+
+        }
+
+        public void SaveGroup(FormCollection formData)
+        {
+            Console.Write("Save gropu....");
+            using (var gctx = new GroupModelContext())
+            {
+                // GroupModel model = new GroupModel();
+                GroupModel ime = new GroupModel(formData["groupName"], 1, 1);
+                gctx.GroupModel.Add(ime);
+                gctx.SaveChanges();
+
+                //    var query = gctx.files.Where(p => p.groupId == 11).
+                //              OrderBy(p => p.uploadDate).Select(p => p.path).ToList();
+
+                //  return View(paths);
+            }
+
+
+
+
         }
     }
 }
