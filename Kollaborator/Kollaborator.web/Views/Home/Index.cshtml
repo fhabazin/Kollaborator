@@ -13,9 +13,12 @@
         <a href="http://asp.net" class="btn btn-primary btn-lg">Ask others to join &raquo;</a>
     </p>
     <div>
-        @foreach (var group in Model)
-        {
-            <a href="@Url.Action("Group")">@group.groupName</a><br/>
+        @if (Model != null) { 
+            foreach (var group in Model)
+            {
+               
+                @Html.ActionLink(@group.groupName,"Group",new {groupID = group.groupID})<br/>;
+            }
         } 
     </div>
 }

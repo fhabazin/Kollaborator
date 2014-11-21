@@ -1,4 +1,4 @@
-﻿@Model System.Collections.Generic.List <System.String>
+﻿
     @{
         Layout = null;
 
@@ -9,24 +9,12 @@
     <head>
         <meta name="viewport" content="width=device-width" />
         <title>Upload</title>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.uploadify.min.js")"></script>
-        <link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/uploadify.css")" />
-        <script type="text/javascript">
-            $(function () {
-                $('#file_upload').uploadify({
-                    'swf': "@Url.Content("~/Scripts/uploadify.swf")",
-                    //this is where the file posts when it uploads.
-                    'uploader': "@Url.Action("FileUpload", "Home")",
-                    'onUploadSuccess': function (file, data, response) {
-                        //data is whatever you return from the server
-                        //we're sending the URL from the server so we append this as an image to the #uploaded div
-                        $("#uploaded").append("<img src='" + data + "' alt='Uploaded Image' />");
-                    }
-                });
-            });
+        @Styles.Render("~/Content/css")
+        
 
-        </script>
+
+       
+
     </head>
     <body>
         <div>
@@ -34,13 +22,9 @@
             <input type="file" name="file_upload" id="file_upload" />
         </div>
         <div id="uploaded">
-            @foreach (var path in Model)
-            {
-                <img src='@path'  alt='Uploaded Image' />
-            }
-
-
 
         </div>
-    </body>
+        <script type='text/javascript' src="~/Scripts/jquery-1.10.2.js"></script>
+        <script type='text/javascript' src="~/Scripts/jquery.uploadify.js" ></script>
+        <script type='text/javascript' src="~/Scripts/uploadify.js"></script></body>
 </html>

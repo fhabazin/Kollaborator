@@ -1,8 +1,46 @@
 ﻿@model Tuple<Kollaborator.web.Models.GroupModel,List<Kollaborator.web.Models.FileModel>>
-@{
+
+
 @{
     ViewBag.Title = "Group";
 }
 
-<h2></h2>
+<h2>@Model.Item1.groupName</h2>
+<div id='uploaded'>
+    @foreach (var file in Model.Item2)
+    {
+        if (file.FileType.Contains("image/"))
+        {
+            <img src='@Url.Content(@file.path)' alt='Uploaded Image' />
+        }
+        else if (file.FileType.Contains("audio/"))
+        {
+            <audio controls>
+                <source src='@Url.Content(@file.path)' type='audio/mpeg'>
+                Your browser does not support the audio tag.
+            </audio>
+        }
+
+    }
+</div>
+
+
+<div>
+    Click Select files to upload files.
+    <input type="file" name="file_upload" id="file_upload" />
+</div>
+
+@Model.Item1.groupID
+
+
+
+
+
+
+
+
+
+
+
+
 

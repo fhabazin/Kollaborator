@@ -19,6 +19,7 @@ namespace Kollaborator.web.Controllers
                 using (var ctx = new ApplicationDbContext())
                 {
                     var userName = WebSecurity.CurrentUserName;
+                    
                     var groupList = ctx.Users
                         .Where(p => p.UserName == userName)
                         .SelectMany(p=> p.userGroups.Select(ug=>ug.group)).
@@ -51,7 +52,7 @@ namespace Kollaborator.web.Controllers
 
             return View();
         }
-        public ActionResult FileUpload()
+        public ActionResult FileUpload(int groupID)
         {
             using (var ctx = new ApplicationDbContext())
             {
@@ -62,7 +63,7 @@ namespace Kollaborator.web.Controllers
                 FileModel fm = new FileModel()
                 {
                     path = savePath,
-                    groupId = 11,
+                    groupId = groupID,
                     uploadDate = DateTime.Now,
                     FileType = file.ContentType
                 };
@@ -121,9 +122,14 @@ namespace Kollaborator.web.Controllers
             using(var ctx = new ApplicationDbContext()){
                 var files = ctx.files.Where(p => p.groupId == groupID).ToList();
                 Tuple<GroupModel,List<FileModel>> groupfiles = new Tuple<GroupModel,List<FileModel>>(ctx.Groups.Where(p => p.groupID ==groupID).FirstOrDefault(), files);
+                ViewBag.view = "group";
                 return View(groupfiles);
             }
             
         }
+
+        
     }
+
+   
 }
