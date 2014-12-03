@@ -1,0 +1,8 @@
+﻿@model Kollaborator.web.Models.ApplicationUser
+
+<div class="single-user-wrapper">
+
+    @Html.HiddenFor(p => p.Id)
+    @Html.LabelFor(p=> p.Email):
+    @Html.EditorFor(p => p.Email)
+</div>

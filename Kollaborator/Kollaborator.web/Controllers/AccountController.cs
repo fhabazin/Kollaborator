@@ -45,6 +45,7 @@ namespace Kollaborator.web.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            
             return View();
         }
 
@@ -61,7 +62,7 @@ namespace Kollaborator.web.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Group");
                 }
                 else
                 {

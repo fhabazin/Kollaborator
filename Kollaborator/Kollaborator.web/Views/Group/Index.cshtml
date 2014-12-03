@@ -1,0 +1,18 @@
+﻿@model System.Collections.Generic.List<Kollaborator.web.Models.GroupModel>
+
+
+<h2>Profile</h2>
+
+<div>
+    <div>@Html.ActionLink("+ New Group", "Create", "Group")</div>
+    @if (Model != null)
+    {
+        foreach (var group in Model)
+        {
+
+            <div>
+                @Html.ActionLink(@group.groupName, "Group", new { groupID = group.groupID })
+            </div><br />
+        }
+    }
+</div>
