@@ -10,7 +10,11 @@ namespace Kollaborator.web
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery.uploadify.js"));
+                        "~/Scripts/jquery.uploadify.js",
+                        "~/Scripts/jquery.fancybox.js",
+                        "~/Scripts/jquery.fancybox-buttons.js",
+                        "~/Scripts/jquery.fancybox-media.js",
+                        "~/Scripts/jquery.fancybox-thumbs.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -27,7 +31,10 @@ namespace Kollaborator.web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Scripts/uploadify.css"));
+                      "~/Content/uploadify.css",
+                      "~/Content/jquery.fancybox.css",
+                      "~/Content/jquery.fancybox-buttons.css",
+                      "~/Content/jquery.fancybox-media.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

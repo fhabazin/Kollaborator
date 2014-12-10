@@ -89,7 +89,7 @@
 
 	//default values
 	jQuery.fn.MyThumbnail.defaults = {
-		thumbWidth:130,
+		thumbWidth:100,
 		thumbHeight:100,
 		backgroundColor:"#ccc",
 		imageDivClass:"myPic",

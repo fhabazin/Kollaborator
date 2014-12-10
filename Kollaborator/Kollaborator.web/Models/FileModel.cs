@@ -16,7 +16,7 @@ namespace Kollaborator.web.Models
         public int groupId { get; set; }
         public DateTime uploadDate { get; set; }
         public String FileType { get; set; }
-
+        public String thumbnail { get; set; }
 
     }
 }

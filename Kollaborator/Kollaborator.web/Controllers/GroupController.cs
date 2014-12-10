@@ -1,6 +1,8 @@
 ﻿using Kollaborator.web.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -65,6 +67,7 @@ namespace Kollaborator.web.Controllers
         {
             using(var ctx = new ApplicationDbContext()){
                 var files = ctx.files.Where(p => p.groupId == groupID).ToList();
+
                 Tuple<GroupModel,List<FileModel>> groupfiles = new Tuple<GroupModel,List<FileModel>>(ctx.Groups.Where(p => p.groupID ==groupID).FirstOrDefault(), files);
                 ViewBag.view = "group";
                 return View(groupfiles);
@@ -84,14 +87,25 @@ namespace Kollaborator.web.Controllers
 
                 string savePath = Server.MapPath(@"~\Content\" + file.FileName);
                 file.SaveAs(savePath);
-
-                FileModel fm = new FileModel()
+                var thumbnailPath = "";
+                if (MimeMapping.GetMimeMapping(file.FileName).Contains("image/"))
                 {
-                    path = savePath,
-                    groupId = groupID,
-                    uploadDate = DateTime.Now,
-                    FileType = MimeMapping.GetMimeMapping(file.FileName)
-                };
+                    var image = new Bitmap(savePath);
+                    var thumbnail = image.GetThumbnailImage(100, 100, null, IntPtr.Zero);
+                    thumbnailPath = Server.MapPath(@"~\Content\" 
+                        + Path.GetFileNameWithoutExtension(file.FileName) 
+                        + "_thumbnail" + Path.GetExtension(file.FileName));
+                    thumbnail.Save(thumbnailPath);
+                    
+                }
+                FileModel fm = new FileModel()
+                    {
+                        path = savePath,
+                        groupId = groupID,
+                        uploadDate = DateTime.Now,
+                        FileType = MimeMapping.GetMimeMapping(file.FileName),
+                        thumbnail = thumbnailPath
+                    };
                 ctx.files.Add(fm);
                 ctx.SaveChanges();
                 return Content(Url.Content(@"~\Content\" + file.FileName));

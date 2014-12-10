@@ -167,7 +167,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MIMEAsisstant.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -196,6 +195,10 @@
     <Compile Include="Migrations\201411181223447_filemodeledit.Designer.cs">
       <DependentUpon>201411181223447_filemodeledit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201412102049008_thumbnails.cs" />
+    <Compile Include="Migrations\201412102049008_thumbnails.Designer.cs">
+      <DependentUpon>201412102049008_thumbnails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileModel.cs" />
@@ -208,6 +211,9 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\jquery.fancybox-buttons.css" />
+    <Content Include="Content\jquery.fancybox-thumbs.css" />
+    <Content Include="Content\jquery.fancybox.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -218,7 +224,12 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery.thumbnail" />
+    <Content Include="Scripts\jquery.fancybox-buttons.js" />
+    <Content Include="Scripts\jquery.fancybox-media.js" />
+    <Content Include="Scripts\jquery.fancybox-thumbs.js" />
+    <Content Include="Scripts\jquery.fancybox.js" />
+    <Content Include="Scripts\jquery.fancybox.pack.js" />
+    <Content Include="Scripts\jquery.thumbnail.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.uploadify.js" />
     <Content Include="Scripts\jquery.uploadify.min.js" />
@@ -232,7 +243,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="img\uploadify-cancel.png" />
-    <Content Include="Scripts\uploadify.css" />
+    <Content Include="Content\uploadify.css" />
     <Content Include="Scripts\uploadify.js" />
     <Content Include="Scripts\uploadify.swf" />
     <Content Include="Scripts\_references.js" />
@@ -307,6 +318,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411181223447_filemodeledit.resx">
       <DependentUpon>201411181223447_filemodeledit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412102049008_thumbnails.resx">
+      <DependentUpon>201412102049008_thumbnails.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
