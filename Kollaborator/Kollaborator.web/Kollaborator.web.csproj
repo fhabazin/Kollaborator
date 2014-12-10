@@ -167,6 +167,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MIMEAsisstant.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -217,6 +218,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.thumbnail" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.uploadify.js" />
     <Content Include="Scripts\jquery.uploadify.min.js" />
@@ -266,7 +268,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Upload.cshtml" />
     <Content Include="Views\Group\Create.cshtml" />
-    <Content Include="Views\Home\Group.cshtml" />
+    <Content Include="Views\Group\Group.cshtml" />
     <Content Include="Views\Shared\_Register.cshtml" />
     <Content Include="Views\Home\Profile.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />

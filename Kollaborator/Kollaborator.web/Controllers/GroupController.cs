@@ -76,6 +76,29 @@ namespace Kollaborator.web.Controllers
             return PartialView("_AddUser");
         }
 
+        public ActionResult FileUpload(int groupID)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var file = Request.Files["Filedata"];
+
+                string savePath = Server.MapPath(@"~\Content\" + file.FileName);
+                file.SaveAs(savePath);
+
+                FileModel fm = new FileModel()
+                {
+                    path = savePath,
+                    groupId = groupID,
+                    uploadDate = DateTime.Now,
+                    FileType = MimeMapping.GetMimeMapping(file.FileName)
+                };
+                ctx.files.Add(fm);
+                ctx.SaveChanges();
+                return Content(Url.Content(@"~\Content\" + file.FileName));
+            }
+        }
         
     }
+
+
     }

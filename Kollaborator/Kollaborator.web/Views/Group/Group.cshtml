@@ -9,14 +9,16 @@
 <div id='uploaded'>
     @foreach (var file in Model.Item2)
     {
+        var path = "~/Content/" + Path.GetFileName(file.path);
         if (file.FileType.Contains("image/"))
         {
-            <img src='@Url.Content(@file.path)' alt='Uploaded Image' />
+            
+            <img src='@Url.Content(path)' alt='Uploaded Image' />
         }
         else if (file.FileType.Contains("audio/"))
         {
             <audio controls>
-                <source src='@Url.Content(@file.path)' type='audio/mpeg'>
+                <source src='@Url.Content(path)' type='audio/mpeg'>
                 Your browser does not support the audio tag.
             </audio>
         }
