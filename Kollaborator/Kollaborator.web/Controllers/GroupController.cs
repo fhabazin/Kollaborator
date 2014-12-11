@@ -45,7 +45,8 @@ namespace Kollaborator.web.Controllers
             Console.Write("Save gropu....");
             using (var ctx = new ApplicationDbContext())
             {
-                 GroupModel group = new GroupModel{
+                GroupModel group = new GroupModel
+                {
                     groupName = formData["groupName"]
                 };
                 var user = ctx.Users.Where(p => p.UserName == WebSecurity.CurrentUserName).FirstOrDefault();
@@ -55,9 +56,9 @@ namespace Kollaborator.web.Controllers
                     group = group
                 };
                 ctx.userGroups.Add(usergroup);
-                
-                
-                
+
+
+
                 ctx.SaveChanges();
                 return View("Index");
             }

@@ -13,7 +13,7 @@
         var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
         if (file.FileType.Contains("image/"))
         {
-            <a class="fancybox-buttons" data-fancybox-group="button" href="@thumbPath"><img src="@fullPath" alt="" /></a>
+            <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
             
         }
         else if (file.FileType.Contains("audio/"))

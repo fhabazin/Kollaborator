@@ -7,8 +7,8 @@
             <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
         </div>
         <div class="panel-body">
-          @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div id="signupalert" style="display:none" class="alert alert-danger">
@@ -22,6 +22,13 @@
                     <label for="email" class="col-md-3 control-label">Email</label>
                     <div class="col-md-9">
                         <input type="text" class="form-control" name="@Html.NameFor(m=>m.Email)" placeholder="Email Address">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="col-md-3 control-label">Username</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="@Html.NameFor(m=>m.Username)" placeholder="Username">
                     </div>
                 </div>
 
@@ -47,11 +54,12 @@
                     </div>
                 </div>
 
-                
 
 
 
-              }        </div>
+
+            }
+        </div>
     </div>
 
 
