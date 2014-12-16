@@ -10,9 +10,7 @@ namespace Kollaborator.web.Models
 {
     public class GroupModel
     {
-        private string p;
-        private string r;
-        private string s;
+        
         [Key]
         public int groupID { get; set; }
         public virtual ICollection<UserGroup> userGroups { get; set; }

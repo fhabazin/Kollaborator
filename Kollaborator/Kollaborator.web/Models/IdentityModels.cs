@@ -28,7 +28,7 @@ namespace Kollaborator.web.Models
         public DbSet<FileModel> files { get; set; }
         public DbSet<UserGroup> userGroups { get; set; }
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("KollaboratorConnection", throwIfV1Schema: false)
         {
         }
 

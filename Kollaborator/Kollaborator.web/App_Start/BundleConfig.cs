@@ -14,7 +14,8 @@ namespace Kollaborator.web
                         "~/Scripts/jquery.fancybox.js",
                         "~/Scripts/jquery.fancybox-buttons.js",
                         "~/Scripts/jquery.fancybox-media.js",
-                        "~/Scripts/jquery.fancybox-thumbs.js"));
+                        "~/Scripts/jquery.fancybox-thumbs.js",
+                        "~/Scripts/jquery.unobtrusive-ajax.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

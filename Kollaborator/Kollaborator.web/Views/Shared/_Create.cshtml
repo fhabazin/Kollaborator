@@ -1,0 +1,57 @@
+﻿@model Kollaborator.web.Models.GroupModel
+
+
+<h2>Create Group</h2>
+
+<div id="container">
+    @using (Html.BeginForm("Create", "Group"))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <h5>Make your own music group</h5>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+
+                @Html.LabelFor(model => model.groupName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.groupName, new { htmlAttributes = new { @class = "form-control"} })
+                    @Html.ValidationMessageFor(model => model.groupName, "", new { @class = "text-danger" })
+                </div>
+                <div class="control-label col-md-2">
+                    <a class="insert-new-user" href="javascript:insertNewUser()">Add a user</a>
+
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+    function insertNewUser() {
+        $.ajax({
+            url: '@Url.Action("AddUserToGroup")',
+            success: function (data) {
+                if ($("div.single-user-wrapper:last").length > 0) {
+                    $(data).insertAfter("div.single-user-wrapper:last");
+                } else {
+                    $(data).insertAfter("a.insert-new-user");
+                }
+            }
+        });
+    } </script>

@@ -35,43 +35,55 @@ namespace Kollaborator.web.Controllers
                 return View();
             }
         }
-        public ActionResult Create()
+        public PartialViewResult Create()
         {
-            return View();
+            return PartialView("_Create");
         }
         [HttpPost]
-        public ActionResult Create(FormCollection formData)
+
+
+
+
+        public ActionResult Create(GroupModel group, IEnumerable<ApplicationUser> users)
         {
-            Console.Write("Save gropu....");
-            using (var ctx = new ApplicationDbContext())
+             using (var ctx = new ApplicationDbContext())
             {
-                GroupModel group = new GroupModel
-                {
-                    groupName = formData["groupName"]
-                };
                 var user = ctx.Users.Where(p => p.UserName == WebSecurity.CurrentUserName).FirstOrDefault();
+                group.creator = user.UserName;
                 var usergroup = new UserGroup
                 {
                     user = user,
                     group = group
                 };
-                ctx.userGroups.Add(usergroup);
-
-
-
                 ctx.SaveChanges();
-                return View("Index");
-            }
-         }
+                foreach (var person in users)
+                {
+                    var  sth = ctx.Users.Any(p=> p.UserName.Equals(person.UserName));
+                    if (sth)
+                    {
+                        usergroup = new UserGroup
+                        {
+                            user = person,
+                            group = group
+                        };
+                    }
+                    ctx.SaveChanges();
+                }
+                
+             }
+             
+             return RedirectToAction("Index");
+        }
+       
 
-        public ActionResult Group(int groupID)
+        public PartialViewResult Group(int groupID)
         {
             using(var ctx = new ApplicationDbContext()){
                 var files = ctx.files.Where(p => p.groupId == groupID).ToList();
 
                 Tuple<GroupModel,List<FileModel>> groupfiles = new Tuple<GroupModel,List<FileModel>>(ctx.Groups.Where(p => p.groupID ==groupID).FirstOrDefault(), files);
                 ViewBag.view = "group";
-                return View(groupfiles);
+                return PartialView("_Group",groupfiles);
             }
             
         }

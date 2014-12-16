@@ -1,8 +1,14 @@
 ﻿@model Kollaborator.web.Models.ApplicationUser
 
 <div class="single-user-wrapper">
-
-    @Html.HiddenFor(p => p.Id)
-    @Html.LabelFor(p=> p.UserName):
-    @Html.EditorFor(p => p.UserName)
+    @using (Html.BeginCollectionItem("users"))
+    {
+        <div class="form-group">
+            @Html.LabelFor(p => p.UserName, htmlAttributes: new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                
+                @Html.EditorFor(p => p.UserName, new { htmlAttributes = new { @class = "form-control input-md" } })
+            </div>
+        </div>
+    }
 </div>
