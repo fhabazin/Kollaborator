@@ -1,40 +1,180 @@
-﻿@model Tuple<Kollaborator.web.Models.GroupModel, List<Kollaborator.web.Models.FileModel>>
+﻿@model Tuple<Kollaborator.web.Models.GroupModel, List<Kollaborator.web.Models.FileModel>, List<Kollaborator.web.Models.ChatModel>>
 
 
 @{
     ViewBag.Title = "Group";
 }
-<div id="groupContainer" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-    <h2>@Model.Item1.groupName</h2>
 
-    <div id='uploaded'>
-
-        @foreach (var file in Model.Item2)
-        {
-            var fullPath = "../Content/" + Path.GetFileName(file.path);
-            var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
-            if (file.FileType.Contains("image/"))
-            {
-                <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
-
-            }
-            else if (file.FileType.Contains("audio/"))
-            {
-                <audio controls>
-                    <source src='@Url.Content(fullPath)' type=file.FileType>
-                    Your browser does not support the audio tag.
-                </audio>
-            }
-
-        }
+<div class="container">
+    <div class="page-header">
+        <h1>@Model.Item1.groupName</h1>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel with-nav-tabs panel-default">
+                <div class="panel-heading">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#images" data-toggle="tab">Images</a></li>
+                        <li><a href="#audio" data-toggle="tab">Audio</a></li>
+                        <li><a href="#chat" data-toggle="tab">Group chat</a></li>
+                        <li><a href="#management" data-toggle="tab">Management</a></li>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="images">
+                            @foreach (var file in Model.Item2)
+                            {
+                                var fullPath = "../Content/" + Path.GetFileName(file.path);
+                                var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                                if (file.FileType.Contains("image/"))
+                                {
+                                    <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
+
+                                }
+                            }
+                        </div>
+                        <div class="tab-pane fade in " id="audio">
+                            @foreach (var file in Model.Item2)
+                            {
+                                var fullPath = "../Content/" + Path.GetFileName(file.path);
+                                var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                                if (file.FileType.Contains("audio/"))
+                                {
+                                    <audio controls>
+                                        <source src='@Url.Content(fullPath)' type=file.FileType>
+                                        Your browser does not support the audio tag.
+                                    </audio>
+                                }
+                            }
+                        </div>
+                        <div class="tab-pane fade in " id="chat">Not yet implementeds</div>
+                        <div class="tab-pane fade in " id="management">Not yet implementeds</div>
+                    </div>
+                </div>
 
 
-    <div>
-        Click Select files to upload files.
-        <input type="file" name="file_upload" id="file_upload" />
+            </div>
+        </div>
     </div>
 </div>
+<footer class="footer">
+    <div class="container">
+        <div class="chatContainer">
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" id="accordion">
+                            <span class="glyphicon glyphicon-comment"></span> Chat
+                            <div class="btn-group pull-right">
+                                <a type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="panel-collapse collapse" id="collapseOne">
+                            <div class="panel-body">
+                                <ul class="chat">
+                                    @foreach (var message in Model.Item3)
+                                    {
+                                        var timestamp = DateTime.Now - message.timestamp;
+                                        var messagetime = "";
+                                        if (timestamp.Days > 1)
+                                        {
+                                            messagetime = timestamp.Days + "ago";
+                                        }
+                                        else
+                                        {
+                                            messagetime = timestamp.Hours + "ago";
+                                        }
+                                        var sender = message.sender;
+                                        if (sender.Equals(WebSecurity.CurrentUserName))
+                                        {
+
+                                            <li class="right clearfix">
+                                                <span class="chat-img pull-right">
+                                                    <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                                                </span>
+                                                <div class="chat-body clearfix">
+                                                    <div class="header">
+                                                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>13 mins ago</small>
+                                                        <strong class="pull-right primary-font">@sender</strong>@messagetime
+                                                    </div>
+                                                    <p>
+
+                                                        @message.message
+
+
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            var firstLetterofName = sender.ElementAt(0);
+                                            var imgSrc = "http://placehold.it/50/55C1E7/fff&text=" + firstLetterofName;
+                                            <li class="left clearfix">
+                                                <span class="chat-img pull-left">
+                                                    <img src=@imgSrc alt="User Avatar" class="img-circle" />
+                                                </span>
+                                                <div class="chat-body clearfix">
+                                                    <div class="header">
+                                                        <strong class="primary-font">@sender</strong> <small class="pull-right text-muted">
+                                                            <span class="glyphicon glyphicon-time"></span>@messagetime
+                                                        </small>
+                                                    </div>
+                                                    <p>
+                                                        @message.message
+
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+
+                                </ul>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="input-group">
+                                    <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-warning btn-sm" id="btn-chat">
+                                            Send
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        var notificationHub = $.connection.notificationHub;
+
+        notificationHub.sendMessage = function (content) {
+            $("#target")
+               .find('ul')
+               .append($("<li></li>").html(content));
+        };
+
+        $.connection.hub.start(function () {
+            notificationHub.activate(function (response) {
+                $("#target")
+               .find('ul')
+               .append($("<li></li>").html(response));
+            });
+        });
+    });
+</script>
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 @if (ViewBag.view == "group")
@@ -50,187 +190,183 @@
                 }
             });
         });
-    </script>
-}
 
+        $(document).ready(function () {
+            /*
+             *  Simple image gallery. Uses default settings
+             */
 
+            $('.fancybox').fancybox();
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        /*
-         *  Simple image gallery. Uses default settings
-         */
+            /*
+             *  Different effects
+             */
 
-        $('.fancybox').fancybox();
-
-        /*
-         *  Different effects
-         */
-
-        // Change title type, overlay closing speed
-        $(".fancybox-effects-a").fancybox({
-            helpers: {
-                title: {
-                    type: 'outside'
-                },
-                overlay: {
-                    speedOut: 0
-                }
-            }
-        });
-
-        // Disable opening and closing animations, change title type
-        $(".fancybox-effects-b").fancybox({
-            openEffect: 'none',
-            closeEffect: 'none',
-
-            helpers: {
-                title: {
-                    type: 'over'
-                }
-            }
-        });
-
-        // Set custom style, close if clicked, change title type and overlay color
-        $(".fancybox-effects-c").fancybox({
-            wrapCSS: 'fancybox-custom',
-            closeClick: true,
-
-            openEffect: 'none',
-
-            helpers: {
-                title: {
-                    type: 'inside'
-                },
-                overlay: {
-                    css: {
-                        'background': 'rgba(238,238,238,0.85)'
+            // Change title type, overlay closing speed
+            $(".fancybox-effects-a").fancybox({
+                helpers: {
+                    title: {
+                        type: 'outside'
+                    },
+                    overlay: {
+                        speedOut: 0
                     }
                 }
-            }
-        });
+            });
 
-        // Remove padding, set opening and closing animations, close if clicked and disable overlay
-        $(".fancybox-effects-d").fancybox({
-            padding: 0,
-
-            openEffect: 'elastic',
-            openSpeed: 150,
-
-            closeEffect: 'elastic',
-            closeSpeed: 150,
-
-            closeClick: true,
-
-            helpers: {
-                overlay: null
-            }
-        });
-
-        /*
-         *  Button helper. Disable animations, hide close button, change title type and content
-         */
-
-        $('.fancybox-buttons').fancybox({
-            openEffect: 'none',
-            closeEffect: 'none',
-
-            prevEffect: 'none',
-            nextEffect: 'none',
-
-            closeBtn: false,
-
-            helpers: {
-                title: {
-                    type: 'inside'
-                },
-                buttons: {}
-            },
-
-            afterLoad: function () {
-                this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
-            }
-        });
-
-
-        /*
-         *  Thumbnail helper. Disable animations, hide close button, arrows and slide to next gallery item if clicked
-         */
-
-        $('.fancybox-thumbs').fancybox({
-            prevEffect: 'none',
-            nextEffect: 'none',
-
-            closeBtn: false,
-            arrows: false,
-            nextClick: true,
-
-            helpers: {
-                thumbs: {
-                    width: 50,
-                    height: 50
-                }
-            }
-        });
-
-        /*
-         *  Media helper. Group items, disable animations, hide arrows, enable media and button helpers.
-        */
-        $('.fancybox-media')
-            .attr('rel', 'media-gallery')
-            .fancybox({
+            // Disable opening and closing animations, change title type
+            $(".fancybox-effects-b").fancybox({
                 openEffect: 'none',
                 closeEffect: 'none',
+
+                helpers: {
+                    title: {
+                        type: 'over'
+                    }
+                }
+            });
+
+            // Set custom style, close if clicked, change title type and overlay color
+            $(".fancybox-effects-c").fancybox({
+                wrapCSS: 'fancybox-custom',
+                closeClick: true,
+
+                openEffect: 'none',
+
+                helpers: {
+                    title: {
+                        type: 'inside'
+                    },
+                    overlay: {
+                        css: {
+                            'background': 'rgba(238,238,238,0.85)'
+                        }
+                    }
+                }
+            });
+
+            // Remove padding, set opening and closing animations, close if clicked and disable overlay
+            $(".fancybox-effects-d").fancybox({
+                padding: 0,
+
+                openEffect: 'elastic',
+                openSpeed: 150,
+
+                closeEffect: 'elastic',
+                closeSpeed: 150,
+
+                closeClick: true,
+
+                helpers: {
+                    overlay: null
+                }
+            });
+
+            /*
+             *  Button helper. Disable animations, hide close button, change title type and content
+             */
+
+            $('.fancybox-buttons').fancybox({
+                openEffect: 'none',
+                closeEffect: 'none',
+
                 prevEffect: 'none',
                 nextEffect: 'none',
 
-                arrows: false,
+                closeBtn: false,
+
                 helpers: {
-                    media: {},
+                    title: {
+                        type: 'inside'
+                    },
                     buttons: {}
+                },
+
+                afterLoad: function () {
+                    this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
                 }
             });
 
-        /*
-         *  Open manually
-         */
 
-        $("#fancybox-manual-a").click(function () {
-            $.fancybox.open('1_b.jpg');
-        });
+            /*
+             *  Thumbnail helper. Disable animations, hide close button, arrows and slide to next gallery item if clicked
+             */
 
-        $("#fancybox-manual-b").click(function () {
-            $.fancybox.open({
-                href: 'iframe.html',
-                type: 'iframe',
-                padding: 5
-            });
-        });
+            $('.fancybox-thumbs').fancybox({
+                prevEffect: 'none',
+                nextEffect: 'none',
 
-        $("#fancybox-manual-c").click(function () {
-            $.fancybox.open([
-                {
-                    href: '1_b.jpg',
-                    title: 'My title'
-                }, {
-                    href: '2_b.jpg',
-                    title: '2nd title'
-                }, {
-                    href: '3_b.jpg'
-                }
-            ], {
+                closeBtn: false,
+                arrows: false,
+                nextClick: true,
+
                 helpers: {
                     thumbs: {
-                        width: 75,
+                        width: 50,
                         height: 50
                     }
                 }
             });
+
+            /*
+             *  Media helper. Group items, disable animations, hide arrows, enable media and button helpers.
+            */
+            $('.fancybox-media')
+                .attr('rel', 'media-gallery')
+                .fancybox({
+                    openEffect: 'none',
+                    closeEffect: 'none',
+                    prevEffect: 'none',
+                    nextEffect: 'none',
+
+                    arrows: false,
+                    helpers: {
+                        media: {},
+                        buttons: {}
+                    }
+                });
+
+            /*
+             *  Open manually
+             */
+
+            $("#fancybox-manual-a").click(function () {
+                $.fancybox.open('1_b.jpg');
+            });
+
+            $("#fancybox-manual-b").click(function () {
+                $.fancybox.open({
+                    href: 'iframe.html',
+                    type: 'iframe',
+                    padding: 5
+                });
+            });
+
+            $("#fancybox-manual-c").click(function () {
+                $.fancybox.open([
+                    {
+                        href: '1_b.jpg',
+                        title: 'My title'
+                    }, {
+                        href: '2_b.jpg',
+                        title: '2nd title'
+                    }, {
+                        href: '3_b.jpg'
+                    }
+                ], {
+                    helpers: {
+                        thumbs: {
+                            width: 75,
+                            height: 50
+                        }
+                    }
+                });
+            });
+
+
         });
-
-
-    });
-</script>
+    </script>
+}
 <style type="text/css">
     .fancybox-custom .fancybox-skin {
         box-shadow: 0 0 50px #222;
@@ -241,15 +377,3 @@
         margin: 0 auto;
     }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-

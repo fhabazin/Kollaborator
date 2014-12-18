@@ -7,7 +7,24 @@
 
 
 
+<div id="groupList" >
+    <span class="pull-left label label-default">
+        @Ajax.ActionLink("+ New Group", "Create", "Group", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "groupDisplay" })
 
+        @if (Model != null)
+        {
+            foreach (var group in Model)
+            {
+
+                <div id="groupItem">
+                    @Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })
+
+                </div><br />
+            }
+        }
+
+    </span>
+</div>
 <div id="groupDisplay">
     @if (Model != null)
     {
@@ -15,23 +32,8 @@
     }
 </div>
 
-           
-<div id="groupList">
-    
-        @Ajax.ActionLink("+ New Group", "Create", "Group", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "groupDisplay" })
-    
-    @if (Model != null)
-    {
-        foreach (var group in Model)
-        {
-
-            <div id="groupItem">
-               @Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })
-
-            </div><br />
-        }
-    }
-    </div>
 
 
-    
+
+
+

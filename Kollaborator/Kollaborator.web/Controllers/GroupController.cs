@@ -1,6 +1,7 @@
 ﻿using Kollaborator.web.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -39,11 +40,8 @@ namespace Kollaborator.web.Controllers
         {
             return PartialView("_Create");
         }
+
         [HttpPost]
-
-
-
-
         public ActionResult Create(GroupModel group, IEnumerable<ApplicationUser> users)
         {
              using (var ctx = new ApplicationDbContext())
@@ -55,21 +53,47 @@ namespace Kollaborator.web.Controllers
                     user = user,
                     group = group
                 };
+                ctx.Groups.Add(group);
+                ctx.userGroups.Add(usergroup);
                 ctx.SaveChanges();
                 foreach (var person in users)
                 {
-                    var  sth = ctx.Users.Any(p=> p.UserName.Equals(person.UserName));
-                    if (sth)
+                    var  sth = ctx.Users.FirstOrDefault(p=> p.UserName.Equals(person.UserName));
+                    if (sth!=null)
                     {
                         usergroup = new UserGroup
                         {
-                            user = person,
-                            group = group
+                            UserID =sth.Id,
+                            
+                            groupID= group.groupID,
+                            
                         };
+                        ctx.userGroups.Add(usergroup);
                     }
+                   
+                    
+                }
+                try {
+                    // Your code...
+                    // Could also be before try if you know the exception occurs in SaveChanges
+
                     ctx.SaveChanges();
                 }
-                
+                catch (DbEntityValidationException e){
+                    foreach (var eve in e.EntityValidationErrors)
+                    {
+                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    
+                }
+
+              
              }
              
              return RedirectToAction("Index");
@@ -80,10 +104,10 @@ namespace Kollaborator.web.Controllers
         {
             using(var ctx = new ApplicationDbContext()){
                 var files = ctx.files.Where(p => p.groupId == groupID).ToList();
-
-                Tuple<GroupModel,List<FileModel>> groupfiles = new Tuple<GroupModel,List<FileModel>>(ctx.Groups.Where(p => p.groupID ==groupID).FirstOrDefault(), files);
+                var messages = ctx.chat.Where(p => p.groupID == groupID).ToList();
+                var groupdata = new Tuple<GroupModel,List<FileModel>,List<ChatModel>>(ctx.Groups.Where(p => p.groupID ==groupID).FirstOrDefault(), files, messages);
                 ViewBag.view = "group";
-                return PartialView("_Group",groupfiles);
+                return PartialView("_Group",groupdata);
             }
             
         }
@@ -124,7 +148,28 @@ namespace Kollaborator.web.Controllers
                 return Content(Url.Content(@"~\Content\" + file.FileName));
             }
         }
-        
+
+        public PartialViewResult Management(int groupID){
+            using(var ctx = new ApplicationDbContext()){
+                var users = ctx.userGroups
+                    .Where(p => p.groupID == groupID)
+                    .Select(p => p.user).ToList();
+                return PartialView("_Management",users);
+            }
+        }
+        public JsonResult CountryList()
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var countries = ctx;
+                return Json(countries, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public void send(ChatModel message)
+        {
+
+        }
     }
 
 

@@ -7,13 +7,13 @@ namespace Kollaborator.web.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class final : IMigrationMetadata
+    public sealed partial class chat1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(final));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(chat1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201412161140233_final"; }
+            get { return "201412171838281_chat1"; }
         }
         
         string IMigrationMetadata.Source

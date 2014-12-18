@@ -14,6 +14,10 @@ namespace Kollaborator.web.Controllers
 
         public ActionResult Index()
         {
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Group");
+            }
             return View();
 
 

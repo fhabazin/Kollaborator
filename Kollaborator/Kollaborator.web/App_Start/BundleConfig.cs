@@ -35,7 +35,8 @@ namespace Kollaborator.web
                       "~/Content/uploadify.css",
                       "~/Content/jquery.fancybox.css",
                       "~/Content/jquery.fancybox-buttons.css",
-                      "~/Content/jquery.fancybox-media.css"));
+                      "~/Content/jquery.fancybox-media.css",
+                      "~/Content/tabbedPanel.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

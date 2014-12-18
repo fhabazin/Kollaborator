@@ -42,6 +42,12 @@
     <Reference Include="BeginCollectionItem">
       <HintPath>..\packages\BeginCollectionItem.1.2.1.0\lib\net35\BeginCollectionItem.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.1.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.1.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Web.Helpers">
@@ -187,12 +193,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201412161140233_final.cs" />
-    <Compile Include="Migrations\201412161140233_final.Designer.cs">
-      <DependentUpon>201412161140233_final.cs</DependentUpon>
+    <Compile Include="Migrations\201412171736061_chat.cs" />
+    <Compile Include="Migrations\201412171736061_chat.Designer.cs">
+      <DependentUpon>201412171736061_chat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412171838281_chat1.cs" />
+    <Compile Include="Migrations\201412171838281_chat1.Designer.cs">
+      <DependentUpon>201412171838281_chat1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ChatModel.cs" />
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\GroupModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -213,6 +224,7 @@
     <Content Include="Content\jquery.fancybox-buttons.css" />
     <Content Include="Content\jquery.fancybox-thumbs.css" />
     <Content Include="Content\jquery.fancybox.css" />
+    <Content Include="Content\tabbedPanel.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -230,6 +242,8 @@
     <Content Include="Scripts\jquery.fancybox-thumbs.js" />
     <Content Include="Scripts\jquery.fancybox.js" />
     <Content Include="Scripts\jquery.fancybox.pack.js" />
+    <Content Include="Scripts\jquery.signalR-2.1.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.1.2.min.js" />
     <Content Include="Scripts\jquery.thumbnail.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -292,6 +306,8 @@
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Emails\Web.config" />
     <Content Include="Views\Emails\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Management.cshtml" />
+    <Content Include="Views\Shared\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -308,8 +324,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201412161140233_final.resx">
-      <DependentUpon>201412161140233_final.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201412171736061_chat.resx">
+      <DependentUpon>201412171736061_chat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412171838281_chat1.resx">
+      <DependentUpon>201412171838281_chat1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

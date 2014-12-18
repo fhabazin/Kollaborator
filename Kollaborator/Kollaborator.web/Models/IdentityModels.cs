@@ -27,6 +27,8 @@ namespace Kollaborator.web.Models
         public DbSet<GroupModel> Groups { get; set; }
         public DbSet<FileModel> files { get; set; }
         public DbSet<UserGroup> userGroups { get; set; }
+
+        public DbSet<ChatModel> chat { get; set; }
         public ApplicationDbContext()
             : base("KollaboratorConnection", throwIfV1Schema: false)
         {
