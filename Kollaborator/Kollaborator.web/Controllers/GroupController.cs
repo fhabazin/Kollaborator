@@ -170,6 +170,51 @@ namespace Kollaborator.web.Controllers
         {
 
         }
+
+        [HttpPost]
+        public void Upload(int groupID)
+        {
+            
+            if (Request.Files.Count > 0)
+            {
+                using (var ctx = new ApplicationDbContext())
+                {
+                    
+                    var files = Request.Files;
+                    
+                    foreach (string key in files)
+                    {
+                        var file = files[key];
+                        string fileName = file.FileName;
+                        fileName = Server.MapPath("~/uploads/" + fileName);
+                        file.SaveAs(fileName);
+                        var thumbnailPath = "";
+                        if (MimeMapping.GetMimeMapping(file.FileName).Contains("image/"))
+                        {
+                            var image = new Bitmap(fileName);
+                            var thumbnail = image.GetThumbnailImage(100, 100, null, IntPtr.Zero);
+                            thumbnailPath = Server.MapPath(@"~\uploads\"
+                                + Path.GetFileNameWithoutExtension(file.FileName)
+                                + "_thumbnail" + Path.GetExtension(file.FileName));
+                            thumbnail.Save(thumbnailPath);
+
+                        }
+                        FileModel fm = new FileModel()
+                        {
+                            path = fileName,
+                            groupId = groupID,
+                            uploadDate = DateTime.Now,
+                            FileType = MimeMapping.GetMimeMapping(file.FileName),
+                            thumbnail = thumbnailPath
+                        };
+                        ctx.files.Add(fm);
+                        ctx.SaveChanges();
+                    }
+                }
+            }
+            Response.ContentType = "text/plain";
+            Response.Write("File(s) uploaded successfully!");
+        }
     }
 
 

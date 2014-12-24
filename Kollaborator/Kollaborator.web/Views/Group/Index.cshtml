@@ -1,38 +1,59 @@
 ﻿@model System.Collections.Generic.List<Kollaborator.web.Models.GroupModel>
 
 
-<h2>Profile</h2>
 
 
 
 
 
-<div id="groupList" >
-    <span class="pull-left label label-default">
-        @Ajax.ActionLink("+ New Group", "Create", "Group", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "groupDisplay" })
+
+
+
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <div class="row clearfix">
+            <div class="col-md-2 column">
+                <ul class="nav nav-stacked nav-pills">
+                    <li>Your profile</li>
+                    <li>@Ajax.ActionLink("+ New Group", "Create", "Group", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "groupDisplay" })</li>
+                    @if (Model != null)
+                    {
+                        var idx = 1;
+                        foreach (var group in Model)
+                        {
+
+                            if (idx++ == 1)
+                            {
+                                <li class="active"> @Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
+                            }
+                            else
+                            {
+                                <li>@Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
+                            }
+
+
+
+
+                        }
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="groupDisplay">
+
 
         @if (Model != null)
         {
-            foreach (var group in Model)
-            {
-
-                <div id="groupItem">
-                    @Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })
-
-                </div><br />
-            }
+            Html.RenderAction("Group", "Group", new { groupID = Model.First().groupID });
         }
 
-    </span>
-</div>
-<div id="groupDisplay">
-    @if (Model != null)
-    {
-        Html.RenderAction("Group", "Group", new { groupID = Model.First().groupID });
-    }
-</div>
+    </div>
 
 
+</div>
 
 
 

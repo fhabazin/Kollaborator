@@ -5,59 +5,96 @@
     ViewBag.Title = "Group";
 }
 
-<div class="container">
-    <div class="page-header">
-        <h1>@Model.Item1.groupName</h1>
+
+<div class="page-header">
+    <h1>@Model.Item1.groupName</h1>
+</div>
+<div class="col-md-6 column">
+    <div class="tabbable" id="tabs-784981">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#images" data-toggle="tab">Images</a></li>
+            <li><a href="#audio" data-toggle="tab">Audio</a></li>
+            <li><a href="#chat" data-toggle="tab">Group chat</a></li>
+            <li><a href="#management" data-toggle="tab">Management</a></li>
+        </ul>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel with-nav-tabs panel-default">
-                <div class="panel-heading">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#images" data-toggle="tab">Images</a></li>
-                        <li><a href="#audio" data-toggle="tab">Audio</a></li>
-                        <li><a href="#chat" data-toggle="tab">Group chat</a></li>
-                        <li><a href="#management" data-toggle="tab">Management</a></li>
-                    </ul>
-                </div>
-                <div class="panel-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade in active" id="images">
-                            @foreach (var file in Model.Item2)
-                            {
-                                var fullPath = "../Content/" + Path.GetFileName(file.path);
-                                var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
-                                if (file.FileType.Contains("image/"))
-                                {
-                                    <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
+    <div class="panel-body">
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="images">
+                @foreach (var file in Model.Item2)
+                {
+                    var fullPath = "../Content/" + Path.GetFileName(file.path);
+                    var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                    if (file.FileType.Contains("image/"))
+                    {
+                        <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
 
-                                }
-                            }
-                        </div>
-                        <div class="tab-pane fade in " id="audio">
-                            @foreach (var file in Model.Item2)
-                            {
-                                var fullPath = "../Content/" + Path.GetFileName(file.path);
-                                var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
-                                if (file.FileType.Contains("audio/"))
-                                {
-                                    <audio controls>
-                                        <source src='@Url.Content(fullPath)' type=file.FileType>
-                                        Your browser does not support the audio tag.
-                                    </audio>
-                                }
-                            }
-                        </div>
-                        <div class="tab-pane fade in " id="chat">Not yet implementeds</div>
-                        <div class="tab-pane fade in " id="management">Not yet implementeds</div>
+                    }
+                }
+            </div>
+            <div class="tab-pane fade in " id="audio">
+                @foreach (var file in Model.Item2)
+                {
+                    var fullPath = "../Content/" + Path.GetFileName(file.path);
+                    var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                    if (file.FileType.Contains("audio/"))
+                    {
+                        <audio controls>
+                            <source src='@Url.Content(fullPath)' type=file.FileType>
+                            Your browser does not support the audio tag.
+                        </audio>
+                    }
+                }
+            </div>
+            <div class="tab-pane fade in " id="chat">Not yet implementeds</div>
+            <div class="tab-pane fade in " id="management">Not yet implementeds</div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="col-md-4 column">
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Upload Files</strong> <small>Bootstrap files upload</small></div>
+        <div class="panel-body">
+
+            <h4>Select files from your computer</h4>
+            <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="file" name="files[]" id="js-upload-files" multiple>
                     </div>
+                    <button type="submit" class="btn btn-sm btn-primary" id="js-upload-submit">Upload files</button>
                 </div>
+            </form>
 
+            <!-- Drop Zone -->
+            <h4>Or drag and drop files below</h4>
+            <div class="upload-drop-zone" id="drop-zone">
+                Just drag and drop files here
+            </div>
 
+            <!-- Progress Bar -->
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                    <span class="sr-only">60% Complete</span>
+                </div>
+            </div>
+
+            <!-- Upload Finished -->
+            <div class="js-upload-finished">
+                <h3>Processed files</h3>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>image-01.jpg</a>
+                    <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>image-02.jpg</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+    </div>
+
 <footer class="footer">
     <div class="container">
         <div class="chatContainer">
@@ -156,30 +193,89 @@
 
 
 
-<script type="text/javascript">
-    $(function () {
-        var notificationHub = $.connection.notificationHub;
 
-        notificationHub.sendMessage = function (content) {
-            $("#target")
-               .find('ul')
-               .append($("<li></li>").html(content));
-        };
 
-        $.connection.hub.start(function () {
-            notificationHub.activate(function (response) {
-                $("#target")
-               .find('ul')
-               .append($("<li></li>").html(response));
-            });
-        });
-    });
-</script>
+
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 @if (ViewBag.view == "group")
 {
     <script type="text/javascript">
+
+        /*$(function () {
+             var notificationHub = $.connection.notificationHub;
+
+             notificationHub.sendMessage = function (content) {
+                 $("#target")
+                    .find('ul')
+                    .append($("<li></li>").html(content));
+             };
+
+             $.connection.hub.start(function () {
+                 notificationHub.activate(function (response) {
+                     $("#target")
+                    .find('ul')
+                    .append($("<li></li>").html(response));
+                 });
+             });
+         });*/
+
+        + function ($) {
+            'use strict';
+
+            // UPLOAD CLASS DEFINITION
+            // ======================
+
+            var dropZone = document.getElementById('drop-zone');
+            var uploadForm = document.getElementById('js-upload-form');
+
+            var startUpload = function (files) {
+                var data = new FormData();
+
+                for (var i = 0; i < files.length; i++) {
+                    data.append(files[i].name, files[i]);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/Group/Upload/?groupID=@Model.Item1.groupID",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        alert(result);
+                    },
+                    error: function () {
+                        alert("There was error uploading files!");
+                    }
+                });
+            };
+
+
+            uploadForm.addEventListener('submit', function (e) {
+                var uploadFiles = document.getElementById('js-upload-files').files;
+                e.preventDefault()
+
+                startUpload(uploadFiles)
+            })
+
+            dropZone.ondrop = function (e) {
+                e.preventDefault();
+                this.className = 'upload-drop-zone';
+
+                startUpload(e.dataTransfer.files)
+            }
+
+            dropZone.ondragover = function () {
+                this.className = 'upload-drop-zone drop';
+                return false;
+            }
+
+            dropZone.ondragleave = function () {
+                this.className = 'upload-drop-zone';
+                return false;
+            }
+
+        }(jQuery);
         $(function () {
             $('#file_upload').uploadify({
                 'swf': "@Url.Content("~/Scripts/uploadify.swf")",
@@ -376,16 +472,17 @@
         max-width: 700px;
         margin: 0 auto;
     }
+
     .chatContainer {
-      
-                   }
-    .panel-primary {
-     position:fixed;
-     width:250px;
-     bottom: 0px;
-     right: 7px;
     }
+
+    .panel-primary {
+        position: fixed;
+        width: 250px;
+        bottom: 0px;
+        right: 7px;
+    }
+
     .container {
- 
     }
 </style>

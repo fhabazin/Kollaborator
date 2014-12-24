@@ -253,6 +253,7 @@
     <Content Include="Content\jquery.fancybox-thumbs.css" />
     <Content Include="Content\jquery.fancybox.css" />
     <Content Include="Content\tabbedPanel.css" />
+    <Content Include="Content\upload.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -289,6 +290,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="img\uploadify-cancel.png" />
     <Content Include="Content\uploadify.css" />
+    <Content Include="Scripts\upload.js" />
     <Content Include="Scripts\uploadify.js" />
     <Content Include="Scripts\uploadify.swf" />
     <Content Include="Scripts\_references.js" />
@@ -339,6 +341,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="uploads\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
@@ -352,7 +355,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-  
     <EmbeddedResource Include="Migrations\201412171838281_chat1.resx">
       <DependentUpon>201412171838281_chat1.cs</DependentUpon>
     </EmbeddedResource>
