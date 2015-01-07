@@ -1,4 +1,4 @@
-﻿@model Tuple<Kollaborator.web.Models.GroupModel, List<Kollaborator.web.Models.FileModel>, List<Kollaborator.web.Models.ChatModel>>
+﻿@model Kollaborator.web.Models.GroupViewModel
 
 
 @{
@@ -7,54 +7,75 @@
 
 
 <div class="page-header">
-    <h1>@Model.Item1.groupName</h1>
+    <h1>@Model.group.groupName</h1>
 </div>
-<div class="col-md-6 column">
-    <div class="tabbable" id="tabs-784981">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#images" data-toggle="tab">Images</a></li>
-            <li><a href="#audio" data-toggle="tab">Audio</a></li>
-            <li><a href="#chat" data-toggle="tab">Group chat</a></li>
-            <li><a href="#management" data-toggle="tab">Management</a></li>
-        </ul>
-    </div>
-    <div class="panel-body">
-        <div class="tab-content">
-            <div class="tab-pane fade in active" id="images">
-                @foreach (var file in Model.Item2)
-                {
-                    var fullPath = "../Content/" + Path.GetFileName(file.path);
-                    var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
-                    if (file.FileType.Contains("image/"))
-                    {
-                        <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
-
-                    }
-                }
-            </div>
-            <div class="tab-pane fade in " id="audio">
-                @foreach (var file in Model.Item2)
-                {
-                    var fullPath = "../Content/" + Path.GetFileName(file.path);
-                    var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
-                    if (file.FileType.Contains("audio/"))
-                    {
-                        <audio controls>
-                            <source src='@Url.Content(fullPath)' type=file.FileType>
-                            Your browser does not support the audio tag.
-                        </audio>
-                    }
-                }
-            </div>
-            <div class="tab-pane fade in " id="chat">Not yet implementeds</div>
-            <div class="tab-pane fade in " id="management">Not yet implementeds</div>
+<div class="col-lg-6 column">
+    <div class="panel panel-default">
+        <div class="tabbable" id="tabs-784981">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#images" data-toggle="tab">Images</a></li>
+                <li><a href="#audio" data-toggle="tab">Audio</a></li>
+                <li><a href="#management" data-toggle="tab">Management</a></li>
+            </ul>
         </div>
+        <div class="panel-body">
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="images">
+                    @foreach (var file in Model.files)
+                    {
+                        var fullPath = "../Content/" + Path.GetFileName(file.path);
+                        var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                        if (file.FileType.Contains("image/"))
+                        {
+                            <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
+
+                        }
+                    }
+                </div>
+                <div class="tab-pane fade in " id="audio">
+                    @foreach (var file in Model.files)
+                    {
+                        var fullPath = "../Content/" + Path.GetFileName(file.path);
+                        var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                        if (file.FileType.Contains("audio/"))
+                        {
+                            <audio controls>
+                                <source src='@Url.Content(fullPath)' type=file.FileType>
+                                Your browser does not support the audio tag.
+                            </audio>
+                        }
+                    }
+                </div>
+
+                <div class="tab-pane fade in " id="management">
+
+                    @using(Html.BeginForm("Management", "Group",  new { groupID = Model.group.groupID }, FormMethod.Post)){
+                    foreach (var member in Model.users)
+                    {
+                        using (Html.BeginCollectionItem("users"))
+                        {
+                                                            @member
+                        <input type="hidden" name="UserName"value="@member"/>
+                                                            }
+                    }
+
+                    <div class="control-label col-md-2">
+                        <a class="insert-new-user" href="javascript:insertNewUser()">Add a user</a>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Manage" class="btn btn-default" />
+                        </div>
+                    </div>}
+                </div>
+            </div>
+        </div>
+
     </div>
-
-
 </div>
 
-<div class="col-md-4 column">
+<div class="col-lg-6 column">
     <div class="panel panel-default">
         <div class="panel-heading"><strong>Upload Files</strong> <small>Bootstrap files upload</small></div>
         <div class="panel-body">
@@ -84,23 +105,21 @@
 
             <!-- Upload Finished -->
             <div class="js-upload-finished">
-                <h3>Processed files</h3>
+                <!-- <h3>Processed files</h3>
                 <div class="list-group">
                     <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>image-01.jpg</a>
                     <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>image-02.jpg</a>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
 </div>
-    </div>
-
 <footer class="footer">
     <div class="container">
         <div class="chatContainer">
 
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-lg-5">
                     <div class="panel panel-primary">
                         <div class="panel-heading" id="accordion">
                             <span class="glyphicon glyphicon-comment"></span> Chat
@@ -113,7 +132,7 @@
                         <div class="panel-collapse collapse" id="collapseOne">
                             <div class="panel-body">
                                 <ul class="chat">
-                                    @foreach (var message in Model.Item3)
+                                    @foreach (var message in Model.messages)
                                     {
                                         var timestamp = DateTime.Now - message.timestamp;
                                         var messagetime = "";
@@ -201,7 +220,18 @@
 @if (ViewBag.view == "group")
 {
     <script type="text/javascript">
-
+        function insertNewUser() {
+            $.ajax({
+                url: '@Url.Action("AddUserToGroup")',
+                success: function (data) {
+                    if ($("div.single-user-wrapper:last").length > 0) {
+                        $(data).insertAfter("div.single-user-wrapper:last");
+                    } else {
+                        $(data).insertAfter("a.insert-new-user");
+                    }
+                }
+            });
+        }
         /*$(function () {
              var notificationHub = $.connection.notificationHub;
 
@@ -237,7 +267,7 @@
                 }
                 $.ajax({
                     type: "POST",
-                    url: "/Group/Upload/?groupID=@Model.Item1.groupID",
+                    url: "/Group/Upload/?groupID=@Model.group.groupID",
                     contentType: false,
                     processData: false,
                     data: data,
@@ -280,13 +310,17 @@
             $('#file_upload').uploadify({
                 'swf': "@Url.Content("~/Scripts/uploadify.swf")",
                 'cancelImg': "~/Scripts/uploadify-cancel.png",
-                'uploader': '@Url.Action("FileUpload", "Group", new { groupID = Model.Item1.groupID })',
+                'uploader': '@Url.Action("FileUpload", "Group", new { groupID = Model.group.groupID })',
                 'onUploadSuccess': function (file, data, response) {
                     $("#uploaded").append("<img src='" + data + "' alt='Uploaded Image' />");
                 }
             });
         });
 
+        $("a.deleteRow").live("click", function () {
+            $(this).parents("div.editorRow:first").remove();
+            return false;
+        });
         $(document).ready(function () {
             /*
              *  Simple image gallery. Uses default settings
@@ -469,7 +503,7 @@
     }
 
     body {
-        max-width: 700px;
+        width: 100%;
         margin: 0 auto;
     }
 

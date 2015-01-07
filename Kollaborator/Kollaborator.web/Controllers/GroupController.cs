@@ -102,13 +102,9 @@ namespace Kollaborator.web.Controllers
 
         public PartialViewResult Group(int groupID)
         {
-            using(var ctx = new ApplicationDbContext()){
-                var files = ctx.files.Where(p => p.groupId == groupID).ToList();
-                var messages = ctx.chat.Where(p => p.groupID == groupID).ToList();
-                var groupdata = new Tuple<GroupModel,List<FileModel>,List<ChatModel>>(ctx.Groups.Where(p => p.groupID ==groupID).FirstOrDefault(), files, messages);
-                ViewBag.view = "group";
-                return PartialView("_Group",groupdata);
-            }
+            ViewBag.view = "group";
+            ViewBag.id = groupID;
+            return PartialView("_Group", new GroupViewModel(groupID));
             
         }
         public PartialViewResult AddUserToGroup() 
@@ -149,22 +145,54 @@ namespace Kollaborator.web.Controllers
             }
         }
 
-        public PartialViewResult Management(int groupID){
+        public ActionResult Management(int groupID, IEnumerable<ApplicationUser> users){
             using(var ctx = new ApplicationDbContext()){
-                var users = ctx.userGroups
-                    .Where(p => p.groupID == groupID)
-                    .Select(p => p.user).ToList();
-                return PartialView("_Management",users);
+                var group = ctx.Groups.Where(p=>p.groupID==groupID).FirstOrDefault();
+                foreach (var person in users)
+                {
+                    var sth = ctx.Users.FirstOrDefault(p => p.UserName.Equals(person.UserName));
+                    if (sth != null)
+                    {
+                       var usergroup = new UserGroup
+                        {
+                            UserID = sth.Id,
+
+                            groupID = group.groupID,
+
+                        };
+                        ctx.userGroups.Add(usergroup);
+                    }
+
+
+                }
+                try
+                {
+                    // Your code...
+                    // Could also be before try if you know the exception occurs in SaveChanges
+
+                    ctx.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    foreach (var eve in e.EntityValidationErrors)
+                    {
+                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+
+                }
+
+
             }
+
+            return RedirectToAction("Index");
         }
-        public JsonResult CountryList()
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var countries = ctx;
-                return Json(countries, JsonRequestBehavior.AllowGet);
-            }
-        }
+        
 
         public void send(ChatModel message)
         {
@@ -211,7 +239,7 @@ namespace Kollaborator.web.Controllers
                         ctx.SaveChanges();
                     }
                 }
-            }
+            } 
             Response.ContentType = "text/plain";
             Response.Write("File(s) uploaded successfully!");
         }

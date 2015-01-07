@@ -1,22 +1,18 @@
 ﻿@model System.Collections.Generic.List<Kollaborator.web.Models.GroupModel>
 
+<div class="row clearfix ">
+
+    <div class="col-lg-2 column">
+
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+            @Html.AntiForgeryToken()
 
 
-
-
-
-
-
-
-
-<div class="row clearfix">
-    <div class="col-md-12 column">
-        <div class="row clearfix">
-            <div class="col-md-2 column">
-                <ul class="nav nav-stacked nav-pills">
-                    <li>Your profile</li>
-                    <li>@Ajax.ActionLink("+ New Group", "Create", "Group", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "groupDisplay" })</li>
-                    @if (Model != null)
+            <ul class="nav nav-stacked nav-pills">
+                <li>Your profile</li>
+                <li>@Ajax.ActionLink("+ New Group", "Create", "Group", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "groupDisplay" })</li>
+                @if (Model != null)
                     {
                         var idx = 1;
                         foreach (var group in Model)
@@ -24,25 +20,26 @@
 
                             if (idx++ == 1)
                             {
-                                <li class="active"> @Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
+                                <li class="fade in"> @Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
                             }
                             else
                             {
-                                <li>@Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
+                                <li class="fade in">@Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
                             }
 
 
 
 
                         }
+                        <li class="fade in"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
                     }
 
-                </ul>
-            </div>
-        </div>
+            </ul>
+                }
     </div>
+   
 
-    <div id="groupDisplay">
+    <div id="groupDisplay" class="col-lg-10">
 
 
         @if (Model != null)
@@ -57,4 +54,48 @@
 
 
 
+<!--
+<div class="row clearfix ">
 
+    <div class="col-lg-2 column">
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="nav-side-menu">
+                <div class="brand">Kollaborator</div>
+                <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+                <div class="menu-list">
+
+                    <ul id="menu-content" class="menu-content collapse out">
+                        <li>Your groups</li>
+                        <li>@Ajax.ActionLink("+ New Group", "Create", "Group", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "groupDisplay" })</li>
+                        @if (Model != null)
+                        {
+                            var idx = 1;
+                            foreach (var group in Model)
+                            {
+
+                                if (idx++ == 1)
+                                {
+                                    <li class="fade in active"> @Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
+                                }
+                                else
+                                {
+                                    <li class="fade in">@Ajax.ActionLink(group.groupName, "Group", "Group", new { groupID = group.groupID }, new AjaxOptions { UpdateTargetId = "groupDisplay" })</li>
+                                }
+
+
+
+
+                            }
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>-->
