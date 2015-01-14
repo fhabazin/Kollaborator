@@ -108,11 +108,13 @@ namespace Kollaborator.web.Controllers
                 else
                 {
                     AddErrors(result);
+                    ViewBag.error = true;
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+
+            return RedirectToAction("IndexBad", "Home",model);
         }
 
         //

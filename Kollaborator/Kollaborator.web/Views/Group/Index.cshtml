@@ -42,10 +42,11 @@
     <div id="groupDisplay" class="col-lg-10">
 
 
-        @if (Model != null)
+        @if (Model.Count>=1)
         {
-            Html.RenderAction("Group", "Group", new { groupID = Model.First().groupID });
+            Html.RenderAction("Group", "Group", new { groupID =Model.First().groupID });
         }
+        
 
     </div>
 

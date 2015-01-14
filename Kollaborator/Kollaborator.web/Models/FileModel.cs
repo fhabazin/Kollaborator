@@ -18,5 +18,10 @@ namespace Kollaborator.web.Models
         public String FileType { get; set; }
         public String thumbnail { get; set; }
 
+
+        internal void delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Kollaborator.web.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Drawing;
 using System.IO;
@@ -148,23 +149,32 @@ namespace Kollaborator.web.Controllers
         public ActionResult Management(int groupID, IEnumerable<ApplicationUser> users){
             using(var ctx = new ApplicationDbContext()){
                 var group = ctx.Groups.Where(p=>p.groupID==groupID).FirstOrDefault();
-                foreach (var person in users)
+                
+                var usersInGroup = ctx.userGroups.Where(p=> p.groupID==groupID).Select(p=>p.user).ToList();
+                var usergroup = new UserGroup
                 {
-                    var sth = ctx.Users.FirstOrDefault(p => p.UserName.Equals(person.UserName));
-                    if (sth != null)
-                    {
-                       var usergroup = new UserGroup
-                        {
-                            UserID = sth.Id,
+                    user = new ApplicationUser(),
+                    group = group
+                };
+                foreach (var user in usersInGroup)
+                {
 
-                            groupID = group.groupID,
-
-                        };
-                        ctx.userGroups.Add(usergroup);
-                    }
-
-
+                    usergroup = ctx.userGroups.Where(p => p.UserID == user.Id).Where(p => p.groupID == group.groupID).FirstOrDefault();
+                    
+                     ctx.userGroups.Remove(usergroup);
                 }
+
+                ctx.SaveChanges();
+
+                foreach (var user in users)
+                {
+                     var  sth = ctx.Users.FirstOrDefault(p=> p.UserName.Equals(user.UserName));
+                     if (sth != null)
+                     {
+                         addUserToGroup(sth, group, ctx);
+                     }
+                }
+                
                 try
                 {
                     // Your code...
@@ -243,7 +253,29 @@ namespace Kollaborator.web.Controllers
             Response.ContentType = "text/plain";
             Response.Write("File(s) uploaded successfully!");
         }
+        private void addUserToGroup(ApplicationUser user, GroupModel group, ApplicationDbContext ctx)
+        {
+            var usergroup = new UserGroup
+            {
+                UserID = user.Id,
+
+                groupID = group.groupID,
+
+            };
+            ctx.userGroups.Add(usergroup);
+        }
+
+        public void deleteFile(int groupID, FileModel file)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                if (file.groupId == groupID)
+                {
+                    file.delete();
+                }
+            }
+        }
     }
 
-
+  
     }

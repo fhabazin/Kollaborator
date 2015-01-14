@@ -23,6 +23,7 @@
                     <div style="margin-bottom: 25px" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                         <input id="@Html.IdFor(m=>m.Password)" type="password" class="form-control" name="@Html.NameFor(m=>m.Password)" placeholder="password">
+                        
                     </div>
 
 
@@ -65,3 +66,11 @@
     </div>
     @Html.Partial("_Register")
 </div>
+@if (ViewBag.error) { 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#loginbox').hide();
+        $('#signupbox').show();
+    });
+</script>
+    }

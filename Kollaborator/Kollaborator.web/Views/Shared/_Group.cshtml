@@ -27,7 +27,11 @@
                         var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
                         if (file.FileType.Contains("image/"))
                         {
-                            <a class="fancybox-buttons" data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
+
+                            <div class="image">
+                                <img class="btn-delete" onclick="javascript:deleteFile(file)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
+                                <a class="fancybox-buttons " data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
+                            </div>
 
                         }
                     }
@@ -47,27 +51,29 @@
                     }
                 </div>
 
-                <div class="tab-pane fade in " id="management">
-
-                    @using(Html.BeginForm("Management", "Group",  new { groupID = Model.group.groupID }, FormMethod.Post)){
-                    foreach (var member in Model.users)
+                <div class="tab-pane fade in" id="management">
+                    <h1>NOT WORKING</h1>
+                    @using (Html.BeginForm("Management", "Group", new { groupID = Model.group.groupID }, FormMethod.Post))
                     {
-                        using (Html.BeginCollectionItem("users"))
+                        
+                       
+                        foreach (var member in Model.users)
                         {
-                                                            @member
-                        <input type="hidden" name="UserName"value="@member"/>
-                                                            }
-                    }
+                            @Html.Partial("_ExistingUser",  member)
+                            
+                        }
 
-                    <div class="control-label col-md-2">
-                        <a class="insert-new-user" href="javascript:insertNewUser()">Add a user</a>
 
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Manage" class="btn btn-default" />
+                        <div class="control-label col-md-2">
+                            <a class="insert-new-user" href="javascript:insertNewUser()">Add a user</a>
+
                         </div>
-                    </div>}
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Manage" class="btn btn-default" />
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -220,6 +226,11 @@
 @if (ViewBag.view == "group")
 {
     <script type="text/javascript">
+
+
+        function deleteFile(file) {
+           
+        }
         function insertNewUser() {
             $.ajax({
                 url: '@Url.Action("AddUserToGroup")',
@@ -232,23 +243,23 @@
                 }
             });
         }
-        /*$(function () {
-             var notificationHub = $.connection.notificationHub;
+            /*$(function () {
+                 var notificationHub = $.connection.notificationHub;
 
-             notificationHub.sendMessage = function (content) {
-                 $("#target")
-                    .find('ul')
-                    .append($("<li></li>").html(content));
-             };
-
-             $.connection.hub.start(function () {
-                 notificationHub.activate(function (response) {
+                 notificationHub.sendMessage = function (content) {
                      $("#target")
-                    .find('ul')
-                    .append($("<li></li>").html(response));
+                        .find('ul')
+                        .append($("<li></li>").html(content));
+                 };
+
+                 $.connection.hub.start(function () {
+                     notificationHub.activate(function (response) {
+                         $("#target")
+                        .find('ul')
+                        .append($("<li></li>").html(response));
+                     });
                  });
-             });
-         });*/
+             });*/
 
         + function ($) {
             'use strict';
@@ -317,10 +328,7 @@
             });
         });
 
-        $("a.deleteRow").live("click", function () {
-            $(this).parents("div.editorRow:first").remove();
-            return false;
-        });
+
         $(document).ready(function () {
             /*
              *  Simple image gallery. Uses default settings

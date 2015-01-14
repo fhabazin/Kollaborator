@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     <link rel="shortcut icon" type="image/png" href="/note.png" />
-   
+   @Scripts.Render("~/bundles/jquery")
+
+@Scripts.Render("~/bundles/bootstrap")
 
     
     @Styles.Render("~/Content/css")
@@ -19,9 +21,7 @@
        
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
     
-    @Scripts.Render("~/bundles/bootstrap")
     @if (ViewBag.view == "group") { 
     <script type="text/javascript">
     $(function () {
@@ -37,12 +37,25 @@
     </script>
     }
     <script type="text/javascript">
-    $("a.deleteRow").live("click", function () {
-        $(this).parents("div.editorRow:first").remove();
-        return false;
-    });
+        function removeItem(link) {
+            $(link).closest("div.single-user-wrapper").remove();
+        }
+        
+        function remove(id) {
+            var element = document.getElementById(id);
+            var helper = element.parentNode;
+            return helper.removeChild(element);
+
+            
+        }
+
+        function removeLater(id) {
+            var element = document.getElementById(id);
+            var helper = element.parentNode;
+            return helper.removeChild(element);
+        }
     </script>
     @RenderSection("scripts", required: false)
-   
-</body>
-</html>
+
+    </body>
+    </html>

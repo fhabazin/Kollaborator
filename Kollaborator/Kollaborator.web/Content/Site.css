@@ -19,3 +19,14 @@ textarea {
 groupDisplay{
     padding-left: 200px;
 }
+.image {
+   width: 100px;
+   height: 100px;
+   position: relative;
+}
+.btn-delete {
+   cursor: pointer;
+   position: absolute;
+   right: 2px;
+   top: 2px;
+}

@@ -43,6 +43,10 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 <script type="text/javascript">
+    $("a.deleteRow").live("click", function () {
+        $(this).parents("div.single-user-wrapper:first").remove();
+        return false;
+    });
     function insertNewUser() {
         $.ajax({
             url: '@Url.Action("AddUserToGroup")',

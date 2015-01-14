@@ -8,13 +8,13 @@
             <div class="form-group">
                 @Html.LabelFor(p => p.UserName)
                 @Html.HiddenFor(p => p.Id)
-                    @Html.EditorFor(p => p.UserName)
-                
-                
-              
+                @Html.EditorFor(p => p.UserName, new { htmlAttributes = new { @Value = Model.UserName}, })
+
+
+
             </div>
         }
-        
+
 
     </div>
 </div>

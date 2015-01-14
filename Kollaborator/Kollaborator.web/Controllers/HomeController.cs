@@ -14,11 +14,26 @@ namespace Kollaborator.web.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.error = false;
+            
             if (Request.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Group");
             }
             return View();
+
+
+        }
+
+        public ActionResult IndexBad(RegisterViewModel model)
+        {
+
+            ViewBag.error = true;
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Group");
+            }
+            return View("Index");
 
 
         }
