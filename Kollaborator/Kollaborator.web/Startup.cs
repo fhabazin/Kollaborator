@@ -2,6 +2,7 @@
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(Kollaborator.web.Startup))]
+
 namespace Kollaborator.web
 {
     public partial class Startup
