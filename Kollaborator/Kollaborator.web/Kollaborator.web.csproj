@@ -231,6 +231,10 @@
     <Compile Include="Migrations\201412171838281_chat1.Designer.cs">
       <DependentUpon>201412171838281_chat1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501160922061_file ID.cs" />
+    <Compile Include="Migrations\201501160922061_file ID.Designer.cs">
+      <DependentUpon>201501160922061_file ID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChatModel.cs" />
@@ -368,6 +372,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201412171838281_chat1.resx">
       <DependentUpon>201412171838281_chat1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501160922061_file ID.resx">
+      <DependentUpon>201501160922061_file ID.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -207,10 +207,7 @@ namespace Kollaborator.web.Controllers
         }
         
 
-        public void send(ChatModel message)
-        {
-
-        }
+      
 
         [HttpPost]
         public void Upload(int groupID)
@@ -268,14 +265,24 @@ namespace Kollaborator.web.Controllers
             ctx.userGroups.Add(usergroup);
         }
 
-        public void deleteFile(int groupID, FileModel file)
+        public void deleteFile(int groupID, int fileId)
         {
             using (var ctx = new ApplicationDbContext())
             {
-                if (file.groupId == groupID)
+                var user = ctx.Users.Where(p => p.UserName == WebSecurity.CurrentUserName).FirstOrDefault();
+                var userGroup = ctx.userGroups.Where(p=>p.groupID== groupID).ToList();
+                var file = ctx.files.Where(p => p.fileId == fileId).FirstOrDefault();
+                if (userGroup.Where(p => p.UserID == user.Id).FirstOrDefault() != null)
                 {
-                    file.delete();
+                    if (file.groupId == groupID)
+                    {
+                        var fileToDelete = ctx.files.Where(p => p.fileId == file.fileId).FirstOrDefault();
+                        ctx.files.Remove(fileToDelete);
+                    }
                 }
+                ctx.SaveChanges();
+                Response.ContentType = "text/plain";
+                Response.Write("File deleted successfully!");
             }
         }
     }

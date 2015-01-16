@@ -11,6 +11,7 @@ namespace Kollaborator.web
         {
             ConfigureAuth(app);
             app.MapSignalR();
+             
         }
     }
 }

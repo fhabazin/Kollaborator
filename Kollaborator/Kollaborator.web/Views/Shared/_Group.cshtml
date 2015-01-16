@@ -28,8 +28,8 @@
                         if (file.FileType.Contains("image/"))
                         {
 
-                            <div class="image">
-                                <img class="btn-delete" onclick="javascript:alert('file')" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
+                            <div class="image" id="@file.fileId">
+                                <img class="btn-delete" onclick="javascript:deleteFile(@file.fileId)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
                                 <a class="fancybox-buttons " data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
                             </div>
 
@@ -55,12 +55,23 @@
                     <h1>NOT WORKING</h1>
                     @using (Html.BeginForm("Management", "Group", new { groupID = Model.group.groupID }, FormMethod.Post))
                     {
-                        
-                       
-                        foreach (var member in Model.users)
+
+                        if (Model.group.creator != null)
                         {
-                            @Html.Partial("_ExistingUser",  member)
-                            
+
+
+                            foreach (var member in Model.users)
+                            {
+
+                                if (member.UserName != null)
+                                {
+                                    if (!Model.group.creator.Equals(member.UserName))
+                                    {
+                                        @Html.Partial("_ExistingUser", member)
+                                    }
+                                }
+                            }
+                           
                         }
 
 
@@ -130,7 +141,7 @@
                         <div class="panel-heading" id="accordion">
                             <span class="glyphicon glyphicon-comment"></span> Chat
                             <div class="btn-group pull-right">
-                                <a type="button" class="btn btn-default btn-xs" id ="chat-manipulation-btn"data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                <a type="button" class="btn btn-default btn-xs" id="chat-manipulation-btn" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                     <span class="glyphicon glyphicon-chevron-down"></span>
                                 </a>
                             </div>
@@ -244,11 +255,11 @@
         };
         // Get the user name and store it to prepend to messages.
 
-         @{
+        @{
 
             var displayname = @Html.Encode(User.Identity.Name).ToString();
         }
-      
+
         // Set initial focus to message input box.
         $('#message').focus();
 
@@ -272,9 +283,9 @@
             $("#collapseOne").removeClass("collapse in");
             $("#collapseOne").attr('aria-expanded', 'false');
             $("#collapseOne").attr('style', '"height:0px;"');
-            
+
         }});
-    
+
 </script>
 
 
@@ -292,8 +303,24 @@
     <script type="text/javascript">
 
 
-        function deleteFile(file) {
-           
+        function deleteFile(fileId) {
+            var file = fileId;
+            var r = confirm("Do you really want to delete whis file? This is ireversible!");
+            if (r == true) {
+                x = $.ajax({
+                    url: '@Url.Action("deleteFile")',
+                    contentType: 'application/json; charset=utf-8',
+                    data: { groupID: @Model.group.groupID, fileId: fileId },
+                    dataType: 'json',
+                    success: function (data) {
+                        var element = document.getElementById(fileId);
+                        var helper = element.parentNode;
+                        return helper.removeChild(element);
+                    }
+                });;
+            } else {
+                x = "You pressed Cancel!";
+            }
         }
         function insertNewUser() {
             $.ajax({
@@ -307,23 +334,23 @@
                 }
             });
         }
-            /*$(function () {
-                 var notificationHub = $.connection.notificationHub;
+        /*$(function () {
+             var notificationHub = $.connection.notificationHub;
 
-                 notificationHub.sendMessage = function (content) {
+             notificationHub.sendMessage = function (content) {
+                 $("#target")
+                    .find('ul')
+                    .append($("<li></li>").html(content));
+             };
+
+             $.connection.hub.start(function () {
+                 notificationHub.activate(function (response) {
                      $("#target")
-                        .find('ul')
-                        .append($("<li></li>").html(content));
-                 };
-
-                 $.connection.hub.start(function () {
-                     notificationHub.activate(function (response) {
-                         $("#target")
-                        .find('ul')
-                        .append($("<li></li>").html(response));
-                     });
+                    .find('ul')
+                    .append($("<li></li>").html(response));
                  });
-             });*/
+             });
+         });*/
 
         + function ($) {
             'use strict';
