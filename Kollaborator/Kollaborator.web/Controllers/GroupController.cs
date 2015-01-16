@@ -56,23 +56,26 @@ namespace Kollaborator.web.Controllers
                 };
                 ctx.Groups.Add(group);
                 ctx.userGroups.Add(usergroup);
-                ctx.SaveChanges();
-                foreach (var person in users)
+
+                if (!(users == null))
                 {
-                    var  sth = ctx.Users.FirstOrDefault(p=> p.UserName.Equals(person.UserName));
-                    if (sth!=null)
+                    foreach (var person in users)
                     {
-                        usergroup = new UserGroup
+                        var sth = ctx.Users.FirstOrDefault(p => p.UserName.Equals(person.UserName));
+                        if (sth != null)
                         {
-                            UserID =sth.Id,
-                            
-                            groupID= group.groupID,
-                            
-                        };
-                        ctx.userGroups.Add(usergroup);
+                            usergroup = new UserGroup
+                            {
+                                UserID = sth.Id,
+
+                                groupID = group.groupID,
+
+                            };
+                            ctx.userGroups.Add(usergroup);
+                        }
+
+
                     }
-                   
-                    
                 }
                 try {
                     // Your code...
