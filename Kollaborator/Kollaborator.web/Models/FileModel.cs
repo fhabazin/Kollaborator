@@ -9,16 +9,16 @@ namespace Kollaborator.web.Models
 {
     public class FileModel
     {
-       
+
         [Key]
+        public int fileId { get; set; }
         public String path { get; set; }
         [ForeignKey("")]
         public int groupId { get; set; }
         public DateTime uploadDate { get; set; }
         public String FileType { get; set; }
         public String thumbnail { get; set; }
-
-        public int fileId { get; set; }
+        
         
     }
 }

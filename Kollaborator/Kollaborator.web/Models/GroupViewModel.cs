@@ -18,7 +18,7 @@ namespace Kollaborator.web.Models
             {
                  group = ctx.Groups.Where(p => p.groupID == groupID).FirstOrDefault();
                  users = ctx.userGroups.Where(p => p.groupID == groupID).Select(p => p.user).ToList();
-                 files = ctx.files.Where(p => p.groupId == groupID).ToList();
+                 files = ctx.file.Where(p => p.groupId == groupID).ToList();
                  messages = ctx.chat.Where(p => p.groupID == groupID).ToList();
             }
         }

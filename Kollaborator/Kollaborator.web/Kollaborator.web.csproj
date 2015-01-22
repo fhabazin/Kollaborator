@@ -223,17 +223,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Migrations\201412171736061_chat.cs" />
-    <Compile Include="Migrations\201412171736061_chat.Designer.cs">
-      <DependentUpon>201412171736061_chat.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201412171838281_chat1.cs" />
-    <Compile Include="Migrations\201412171838281_chat1.Designer.cs">
-      <DependentUpon>201412171838281_chat1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201501160922061_file ID.cs" />
-    <Compile Include="Migrations\201501160922061_file ID.Designer.cs">
-      <DependentUpon>201501160922061_file ID.cs</DependentUpon>
+    <Compile Include="Migrations\201501211600041_init.cs" />
+    <Compile Include="Migrations\201501211600041_init.Designer.cs">
+      <DependentUpon>201501211600041_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -370,11 +362,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201412171838281_chat1.resx">
-      <DependentUpon>201412171838281_chat1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201501160922061_file ID.resx">
-      <DependentUpon>201501160922061_file ID.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201501211600041_init.resx">
+      <DependentUpon>201501211600041_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

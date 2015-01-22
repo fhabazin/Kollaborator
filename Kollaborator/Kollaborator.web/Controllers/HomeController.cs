@@ -61,7 +61,7 @@ namespace Kollaborator.web.Controllers
             using (var ctx = new ApplicationDbContext())
             {
 
-                var query = ctx.files.Where(p => p.groupId == 11).
+                var query = ctx.file.Where(p => p.groupId == 11).
                             OrderBy(p => p.uploadDate).Select(p => p.path).ToList();
                 List<String> paths = new List<String>();
                 foreach (String path in query)

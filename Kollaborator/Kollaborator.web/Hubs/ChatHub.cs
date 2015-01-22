@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using System.Threading.Tasks;
 //original je bil Kollaborator.web.hubs
 namespace Kollaborator.web
 {
@@ -13,5 +14,5 @@ namespace Kollaborator.web
             // Call the addNewMessageToPage method to update clients.
             Clients.All.addNewMessageToPage(name, message);
         }
-    }
+
 }

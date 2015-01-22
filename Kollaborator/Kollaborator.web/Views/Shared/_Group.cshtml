@@ -23,13 +23,13 @@
                 <div class="tab-pane fade in active" id="images">
                     @foreach (var file in Model.files)
                     {
-                        var fullPath = "../Content/" + Path.GetFileName(file.path);
-                        var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                        var fullPath = "../uploads/" + Path.GetFileName(file.path);
+                        var thumbPath = "../uploads/" + Path.GetFileName(file.thumbnail);
                         if (file.FileType.Contains("image/"))
                         {
 
                             <div class="image" id="@file.fileId">
-                                <img class="btn-delete" onclick="javascript:deleteFile(@file.fileId)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
+                                <img href="javascript:void(0)" class="btn-delete" onclick="javascript:deleteFile(this)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
                                 <a class="fancybox-buttons " data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
                             </div>
 
@@ -39,20 +39,23 @@
                 <div class="tab-pane fade in " id="audio">
                     @foreach (var file in Model.files)
                     {
-                        var fullPath = "../Content/" + Path.GetFileName(file.path);
-                        var thumbPath = "../Content/" + Path.GetFileName(file.thumbnail);
+                        var fullPath = "../uploads/" + Path.GetFileName(file.path);
+                        var thumbPath = "../uploads/" + Path.GetFileName(file.thumbnail);
                         if (file.FileType.Contains("audio/"))
                         {
-                            <audio controls>
-                                <source src='@Url.Content(fullPath)' type=file.FileType>
-                                Your browser does not support the audio tag.
-                            </audio>
+                            <div class="file" id="@file.fileId">
+                                <img class="btn-delete" onclick="javascript:deleteFile(this)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
+                                <audio controls>
+                                    <source src='@Url.Content(fullPath)' type=file.FileType>
+                                    Your browser does not support the audio tag.
+                                </audio>
+                            </div>
                         }
                     }
-                </div>
+                            </div>
 
                 <div class="tab-pane fade in" id="management">
-                    <h1>NOT WORKING</h1>
+                    
                     @using (Html.BeginForm("Management", "Group", new { groupID = Model.group.groupID }, FormMethod.Post))
                     {
 
@@ -302,21 +305,23 @@
 {
     <script type="text/javascript">
 
-
-        function deleteFile(fileId) {
-            var file = fileId;
+        function removeFile(link){
+            $(link).closest("div.image").remove();
+        }
+        function deleteFile(link) {
+            debugger;
+            var file = $(link).closest("div.image").attr("id");
+            
             var r = confirm("Do you really want to delete whis file? This is ireversible!");
             if (r == true) {
                 x = $.ajax({
                     url: '@Url.Action("deleteFile")',
                     contentType: 'application/json; charset=utf-8',
-                    data: { groupID: @Model.group.groupID, fileId: fileId },
+                    data: { groupID: @Model.group.groupID, fileId: file },
                     dataType: 'json',
-                    success: function (data) {
-                        var element = document.getElementById(fileId);
-                        var helper = element.parentNode;
-                        return helper.removeChild(element);
-                    }
+                    success: 
+                        $(link).closest("div.image").remove()
+                    
                 });;
             } else {
                 x = "You pressed Cancel!";
@@ -363,10 +368,11 @@
 
             var startUpload = function (files) {
                 var data = new FormData();
-
+                
                 for (var i = 0; i < files.length; i++) {
                     data.append(files[i].name, files[i]);
                 }
+                debugger;
                 $.ajax({
                     type: "POST",
                     url: "/Group/Upload/?groupID=@Model.group.groupID",

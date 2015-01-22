@@ -9,7 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebMatrix.WebData;
-
+using Microsoft.AspNet.SignalR;
+using Kollaborator.web.
 namespace Kollaborator.web.Controllers
 {
     public class GroupController : Controller
@@ -106,6 +107,7 @@ namespace Kollaborator.web.Controllers
 
         public PartialViewResult Group(int groupID)
         {
+            
             ViewBag.view = "group";
             ViewBag.id = groupID;
             return PartialView("_Group", new GroupViewModel(groupID));
@@ -143,7 +145,7 @@ namespace Kollaborator.web.Controllers
                         FileType = MimeMapping.GetMimeMapping(file.FileName),
                         thumbnail = thumbnailPath
                     };
-                ctx.files.Add(fm);
+                ctx.file.Add(fm);
                 ctx.SaveChanges();
                 return Content(Url.Content(@"~\Content\" + file.FileName));
             }
@@ -219,39 +221,56 @@ namespace Kollaborator.web.Controllers
                 {
                     
                     var files = Request.Files;
-                    
+
                     foreach (string key in files)
                     {
+
                         var file = files[key];
-                        string fileName = file.FileName;
-                        fileName = Server.MapPath("~/uploads/" + fileName);
-                        file.SaveAs(fileName);
-                        var thumbnailPath = "";
-                        if (MimeMapping.GetMimeMapping(file.FileName).Contains("image/"))
+                        if (MimeMapping.GetMimeMapping(file.FileName).Contains("image/") || MimeMapping.GetMimeMapping(file.FileName).Contains("audio/"))
                         {
-                            var image = new Bitmap(fileName);
-                            var thumbnail = image.GetThumbnailImage(100, 100, null, IntPtr.Zero);
-                            thumbnailPath = Server.MapPath(@"~\uploads\"
-                                + Path.GetFileNameWithoutExtension(file.FileName)
-                                + "_thumbnail" + Path.GetExtension(file.FileName));
-                            thumbnail.Save(thumbnailPath);
+                            string fileName = file.FileName;
+                            // rename file to upload date time
+                            var now = DateTime.Now;
+                            string fileNameDateTime = now.Day.ToString()
+                                + now.Month.ToString() + now.Year.ToString()
+                                + now.Hour.ToString() + now.Minute.ToString()
+                                + now.Second.ToString() + Path.GetExtension(file.FileName);
+                            fileName = Server.MapPath("~/uploads/" + fileNameDateTime);
+                            file.SaveAs(fileName);
+
+                            var thumbnailPath = "";
+                            var thumbnailPathStr = "";
+                            if (MimeMapping.GetMimeMapping(file.FileName).Contains("image/"))
+                            {
+                                var image = new Bitmap(fileName);
+                                var thumbnail = image.GetThumbnailImage(100, 100, null, IntPtr.Zero);
+                                thumbnailPathStr = Path.GetFileNameWithoutExtension(fileNameDateTime)
+                                    + "_thumbnail" + Path.GetExtension(fileName);
+                                thumbnailPath = Server.MapPath("~/uploads/" + thumbnailPathStr);
+                                thumbnail.Save(thumbnailPath);
+                                image.Dispose();
+                                thumbnail.Dispose();
+                                Response.ContentType = MimeMapping.GetMimeMapping(file.FileName);
+                            }
+
+                            FileModel fm = new FileModel()
+                            {
+                                path = fileNameDateTime,
+                                groupId = groupID,
+                                uploadDate = DateTime.Now,
+                                FileType = MimeMapping.GetMimeMapping(file.FileName),
+                                thumbnail = thumbnailPathStr
+                            };
+                            ctx.file.Add(fm);
 
                         }
-                        FileModel fm = new FileModel()
-                        {
-                            path = fileName,
-                            groupId = groupID,
-                            uploadDate = DateTime.Now,
-                            FileType = MimeMapping.GetMimeMapping(file.FileName),
-                            thumbnail = thumbnailPath
-                        };
-                        ctx.files.Add(fm);
-                        ctx.SaveChanges();
                     }
+                    ctx.SaveChanges();
                 }
             } 
-            Response.ContentType = "text/plain";
+            
             Response.Write("File(s) uploaded successfully!");
+            
         }
         private void addUserToGroup(ApplicationUser user, GroupModel group, ApplicationDbContext ctx)
         {
@@ -271,14 +290,25 @@ namespace Kollaborator.web.Controllers
             {
                 var user = ctx.Users.Where(p => p.UserName == WebSecurity.CurrentUserName).FirstOrDefault();
                 var userGroup = ctx.userGroups.Where(p=>p.groupID== groupID).ToList();
-                var file = ctx.files.Where(p => p.fileId == fileId).FirstOrDefault();
-                if (userGroup.Where(p => p.UserID == user.Id).FirstOrDefault() != null)
+                var file = ctx.file.Where(p => p.fileId == fileId).FirstOrDefault();
+                try
                 {
-                    if (file.groupId == groupID)
+                    if (userGroup.Where(p => p.UserID == user.Id).FirstOrDefault() != null)
                     {
-                        var fileToDelete = ctx.files.Where(p => p.fileId == file.fileId).FirstOrDefault();
-                        ctx.files.Remove(fileToDelete);
+                        if (file.groupId == groupID)
+                        {
+                            var fileToDelete = ctx.file.Where(p => p.fileId == file.fileId).FirstOrDefault();
+                            var physicalPath = Server.MapPath("~/uploads/" + fileToDelete.path);
+                            System.IO.File.Delete(physicalPath);
+                            physicalPath = Server.MapPath("~/uploads/" + fileToDelete.thumbnail);
+                            System.IO.File.Delete(physicalPath);
+                            ctx.file.Remove(fileToDelete);
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.GetType());
                 }
                 ctx.SaveChanges();
                 Response.ContentType = "text/plain";

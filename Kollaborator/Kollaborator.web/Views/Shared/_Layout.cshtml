@@ -16,10 +16,10 @@
 </head>
 <body>
    
-    <div class="container">
+    <div class="page">
         @RenderBody()
-       
     </div>
+    
 
     
     @if (ViewBag.view == "group") { 
@@ -40,6 +40,7 @@
         function removeItem(link) {
             $(link).closest("div.single-user-wrapper").remove();
         }
+        
         
         function remove(id) {
             var element = document.getElementById(id);
