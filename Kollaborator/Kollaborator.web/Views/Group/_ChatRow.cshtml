@@ -1,0 +1,44 @@
+﻿@model Kollaborator.web.Models.ChatModel
+
+@{ var timestamp = Model.timestamp.ToString("dd-MM-yyyy");
+
+
+ var sender = Model.sender;
+
+if (sender.Equals(WebSecurity.CurrentUserName))
+{
+    <div class="row msg_container base_sent" id="@Model.messageID" >
+        <div class="col-md-10 col-xs-10">
+            
+            <div class="messages msg_sent">
+                <p>
+                    @Model.message
+                </p>
+                <time datetime="@DateTime.Now">@sender - @timestamp</time>
+            </div>
+            
+        </div>
+        <div class="col-md-2 col-xs-2 avatar">
+            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle img-responsive" />
+        </div>
+    </div>
+}
+else
+{
+    var firstLetterofName = sender.ElementAt(0);
+    var imgSrc = "http://placehold.it/50/55C1E7/fff&text=" + firstLetterofName;
+    <div class="row msg_container base_receive" id="@Model.messageID" >
+        <div class="col-md-2 col-xs-2 avatar">
+            <img src="@imgSrc" class=" img-responsive img-circle" />
+        </div>
+        <div class="messages msg_receive">
+            <p>
+                @Model.message
+            </p>
+            <time datetime="2009-11-13T20:00">@sender - @timestamp</time>
+        </div>
+    </div>
+}
+
+
+}

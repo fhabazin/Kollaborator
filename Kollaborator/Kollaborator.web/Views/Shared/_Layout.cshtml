@@ -7,12 +7,10 @@
     <title>@ViewBag.Title</title>
     <link rel="shortcut icon" type="image/png" href="/note.png" />
    @Scripts.Render("~/bundles/jquery")
-
-@Scripts.Render("~/bundles/bootstrap")
-
-    
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"> </script>
+            @Scripts.Render("~/bundles/bootstrap")
+            @Styles.Render("~/Content/css")
+            @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
    
@@ -34,27 +32,19 @@
             }
         });
     });
+
+        
     </script>
     }
     <script type="text/javascript">
+        
         function removeItem(link) {
             $(link).closest("div.single-user-wrapper").remove();
         }
+
+
         
         
-        function remove(id) {
-            var element = document.getElementById(id);
-            var helper = element.parentNode;
-            return helper.removeChild(element);
-
-            
-        }
-
-        function removeLater(id) {
-            var element = document.getElementById(id);
-            var helper = element.parentNode;
-            return helper.removeChild(element);
-        }
     </script>
     @RenderSection("scripts", required: false)
 

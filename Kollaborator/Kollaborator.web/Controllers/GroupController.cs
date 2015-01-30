@@ -10,11 +10,15 @@ using System.Web;
 using System.Web.Mvc;
 using WebMatrix.WebData;
 using Microsoft.AspNet.SignalR;
-using Kollaborator.web.
+using System.Web.Routing;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
+
 namespace Kollaborator.web.Controllers
 {
     public class GroupController : Controller
     {
+        private const int MESSAGE_NUMBER = 25;
         // GET: Group
         public ActionResult Index()
         {
@@ -103,15 +107,19 @@ namespace Kollaborator.web.Controllers
              
              return RedirectToAction("Index");
         }
-       
+
 
         public PartialViewResult Group(int groupID)
         {
-            
+
             ViewBag.view = "group";
             ViewBag.id = groupID;
-            return PartialView("_Group", new GroupViewModel(groupID));
-            
+            using (var ctx = new ApplicationDbContext())
+            {
+
+                return PartialView("_Group", new GroupViewModel(groupID));
+
+            }
         }
         public PartialViewResult AddUserToGroup() 
         { 
@@ -154,7 +162,7 @@ namespace Kollaborator.web.Controllers
         public ActionResult Management(int groupID, IEnumerable<ApplicationUser> users){
             using(var ctx = new ApplicationDbContext()){
                 var group = ctx.Groups.Where(p=>p.groupID==groupID).FirstOrDefault();
-                
+                var creator = ctx.Users.Where(p => p.UserName == group.creator).FirstOrDefault();
                 var usersInGroup = ctx.userGroups.Where(p=> p.groupID==groupID).Select(p=>p.user).ToList();
                 var usergroup = new UserGroup
                 {
@@ -170,7 +178,7 @@ namespace Kollaborator.web.Controllers
                 }
 
                 ctx.SaveChanges();
-
+                addUserToGroup(creator, group, ctx);
                 foreach (var user in users)
                 {
                      var  sth = ctx.Users.FirstOrDefault(p=> p.UserName.Equals(user.UserName));
@@ -219,7 +227,7 @@ namespace Kollaborator.web.Controllers
             {
                 using (var ctx = new ApplicationDbContext())
                 {
-                    
+                    List<FileJSON> filesDTO = new List<FileJSON>();
                     var files = Request.Files;
 
                     foreach (string key in files)
@@ -262,14 +270,22 @@ namespace Kollaborator.web.Controllers
                                 thumbnail = thumbnailPathStr
                             };
                             ctx.file.Add(fm);
-
+                            var fileJson = new FileJSON()
+                            {
+                                id = fm.fileId,
+                                fullPath = fileNameDateTime,
+                                thumbnailPath = thumbnailPathStr,
+                                mime = fm.FileType
+                            };
+                            filesDTO.Add(fileJson);
                         }
                     }
                     ctx.SaveChanges();
+                    Response.ContentType = "application/json";
+                    Response.Write(JsonConvert.SerializeObject(filesDTO));
                 }
-            } 
+            }
             
-            Response.Write("File(s) uploaded successfully!");
             
         }
         private void addUserToGroup(ApplicationUser user, GroupModel group, ApplicationDbContext ctx)
@@ -300,8 +316,12 @@ namespace Kollaborator.web.Controllers
                             var fileToDelete = ctx.file.Where(p => p.fileId == file.fileId).FirstOrDefault();
                             var physicalPath = Server.MapPath("~/uploads/" + fileToDelete.path);
                             System.IO.File.Delete(physicalPath);
-                            physicalPath = Server.MapPath("~/uploads/" + fileToDelete.thumbnail);
-                            System.IO.File.Delete(physicalPath);
+                            if (fileToDelete.FileType.Contains("image/"))
+                            {
+                                physicalPath = Server.MapPath("~/uploads/" + fileToDelete.thumbnail);
+                                System.IO.File.Delete(physicalPath);
+                            }
+                            
                             ctx.file.Remove(fileToDelete);
                         }
                     }
@@ -311,10 +331,42 @@ namespace Kollaborator.web.Controllers
                     Console.Write(e.GetType());
                 }
                 ctx.SaveChanges();
-                Response.ContentType = "text/plain";
-                Response.Write("File deleted successfully!");
+                
+                Response.ContentType = "application/json";
+                Response.Write(JsonConvert.SerializeObject(file));
             }
         }
+
+        public PartialViewResult PopulateChat(int groupID)
+        {
+            
+            List<ChatModel> messages;
+            using (var ctx = new ApplicationDbContext())
+            {
+                 messages = ctx.chat.Where(p => p.groupID == groupID).OrderByDescending(p=>p.messageID).Take(MESSAGE_NUMBER).OrderBy(p=>p.messageID).ToList();
+                 ViewBag.Group = ctx.Groups.Where(p => p.groupID == groupID).Select(p => p.groupName).FirstOrDefault();
+                 ViewBag.ID = groupID;
+            }
+            return PartialView("_Chat", messages);
+        }
+
+        public void LoadMoreMessages(int groupID, int oldestMessage)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var messages = ctx.chat.Where(p => p.groupID == groupID)
+                    .Where(p => p.messageID < oldestMessage).OrderByDescending(p => p.messageID)
+                    .Take(MESSAGE_NUMBER).ToList();
+                Response.ContentType = "application/json";
+                Response.Write(JsonConvert.SerializeObject(messages));
+            }
+        }
+
+       
+
+
+
+        
     }
 
   

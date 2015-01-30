@@ -55,6 +55,8 @@ namespace Kollaborator.web
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            app.MapSignalR();
         }
     }
 }

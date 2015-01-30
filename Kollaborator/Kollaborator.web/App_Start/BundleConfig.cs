@@ -15,7 +15,8 @@ namespace Kollaborator.web
                         "~/Scripts/jquery.fancybox-buttons.js",
                         "~/Scripts/jquery.fancybox-media.js",
                         "~/Scripts/jquery.fancybox-thumbs.js",
-                        "~/Scripts/jquery.unobtrusive-ajax.js"));
+                        "~/Scripts/jquery.unobtrusive-ajax.js",
+                        "~/Scripts/chat.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -37,7 +38,8 @@ namespace Kollaborator.web
                       "~/Content/jquery.fancybox-buttons.css",
                       "~/Content/jquery.fancybox-media.css",
                       "~/Content/tabbedPanel.css",
-                      "~/Content/upload.css"));
+                      "~/Content/upload.css",
+                      "~/Content/chat.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

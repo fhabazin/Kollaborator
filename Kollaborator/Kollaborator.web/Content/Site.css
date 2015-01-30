@@ -27,6 +27,6 @@ groupDisplay{
 .btn-delete {
    cursor: pointer;
    position: absolute;
-   right: 2px;
+   left: 100px;
    top: 2px;
 }

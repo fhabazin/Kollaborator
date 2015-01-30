@@ -1,0 +1,34 @@
+﻿@model List<Kollaborator.web.Models.ChatModel>
+
+
+<div class="row chat-window col-xs-5 col-md-3" id="chat_window" style="margin-left:10px;">
+    <div class="col-xs-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading top-bar">
+                <div class="col-md-8 col-xs-8">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> @ViewBag.Group - Kollaborator</h3>
+                </div>
+                <div class="col-md-4 col-xs-4" style="text-align: right;">
+                    <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+
+                </div>
+            </div>
+            <div id ="chatPanel" class="panel-body msg_container_base">
+                <a href="#" id="btn-update" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-repeat"></span> Load 25 more messages</a>
+                @foreach (var message in Model)
+                {
+                    Html.RenderPartial("_ChatRow", message);
+                    
+                }
+            </div>
+            <div class="panel-footer">
+                @{Html.RenderPartial("_ChatControlles", new Kollaborator.web.Models.ChatModel() { groupID = ViewBag.ID });}
+                
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    
+ 
+</script>

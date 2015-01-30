@@ -1,0 +1,110 @@
+﻿@model Kollaborator.web.Models.ChatModel
+
+
+
+    
+    <div id="chatInput" class="input-group">
+    @Html.HiddenFor(m => m.groupID)
+    <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." name="@Html.NameFor(m=>m.message)" />
+    <span class="input-group-btn">
+        <button class="btn btn-primary btn-sm" id="btn-chat" name="sendmessage">Send</button>
+    </span>
+</div>
+
+<script src='~/signalr/hubs'></script>
+<script type="text/javascript">
+
+    
+    $(document).ready(function() {
+        var connection = $.connection.chatHub;
+
+        var chat = $.connection.chatHub;
+
+        $('#btn-update').click(function (){
+            var updateData ={};
+            updateData.groupId = @Model.groupID;
+            updateData.oldestMessage = $(".msg_container:first").attr('id');
+
+            $.ajax({
+                url: '@Url.Action("LoadMoreMessages")',
+                contentType: 'application/json; charset=utf-8',
+                data: updateData,
+                dataType: 'json',
+                success: function (data) {
+                    for(i = 0; i < data.length; i++){
+                        $("#chatPanel").prepend(generateHtmlForMessage(data[i]));
+
+                        
+                    }
+                    updateData.oldestMessage = $(".msg_container:first").attr('id');
+                }
+            });
+        })
+       
+        function generateHtmlForMessage(msg){
+            var sender = String(msg.sender);
+            var currentuser = document.getElementById("currenuser").value;
+            var encodedMsg="";
+            if(sender==currentuser){
+                encodedMsg= '<div class="row msg_container base_sent" id='+msg.messageID+' >    <div class="col-md-10 col-xs-10">';
+                encodedMsg +=  '<div class="messages msg_sent"><p>'+msg.message+'</p>';
+                encodedMsg += '<time datetime="@DateTime.Now">'+msg.sender+' - '+'timestamp</time></div></div><div class="col-md-2 col-xs-2 avatar"><img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle img-responsive" /></div></div>';
+            } else{
+                var firstLetterofName = sender.charAt(0);
+                var imgSrc = "http://placehold.it/50/55C1E7/fff&text=" + firstLetterofName;
+                encodedMsg+='<div class="row msg_container base_receive" id='+msg.messageID+'><div class="col-md-2 col-xs-2 avatar"><img src='+imgSrc+' class=" img-responsive img-circle" /></div><div class="messages msg_receive">';
+                encodedMsg += '<p>'+msg.message+'</p><time datetime="2009-11-13T20:00">'+sender+' - '+'timestamp</time></div></div>';
+
+            }
+            // Add the message to the page.
+
+            return encodedMsg;
+        }
+        $.connection.hub.logging = true;
+        $("#chatPanel").scrollTop(1000000);
+        connection.client.broadcastMessage = function (name, message) {
+            // Html encode display name and message.
+            var msg =JSON.parse(message);
+
+
+
+            // Add the message to the page.
+
+            $('#chatPanel').append(generateHtmlForMessage(msg));
+        };
+
+
+        $.connection.hub.start().done(function () {
+            chat.invoke('subscribe', @Model.groupID);
+            $('#btn-chat').click(function () {
+
+
+                // Call the Send method on the hub.
+                if($("#btn-input").val()!=""){
+
+                    chat.server.send(@Model.groupID,$("#btn-input").val()) ;
+
+                    // Clear text box and reset focus for next comment.
+                    $("#btn-input").val('').focus();
+                }
+            });
+
+
+        });});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
