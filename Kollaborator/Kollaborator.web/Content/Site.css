@@ -30,3 +30,24 @@ groupDisplay{
    left: 100px;
    top: 2px;
 }
+
+.panel .slidedown .glyphicon, .chat .glyphicon
+{
+    margin-right: 5px;
+}
+
+.login-panel-body
+{
+    height: 300px;
+}
+
+.input-group{
+    margin-left: 10px;
+
+
+}
+
+.group-panel-body{
+    overflow-y: scroll;
+    height: 500px;
+}

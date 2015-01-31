@@ -6,7 +6,7 @@
             <div class="panel-title">Sign Up</div>
             <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
         </div>
-        <div class="panel-body">
+        <div class="login-panel-body">
             @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()

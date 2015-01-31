@@ -8,7 +8,7 @@
 
 <div class="page-header">
     <h1>@Model.group.groupName</h1>
-    <input type="hidden" value="@WebSecurity.CurrentUserName" id="currenuser"/>
+    <input type="hidden" value="@WebSecurity.CurrentUserName" id="currenuser" />
 </div>
 <div class="col-lg-6 column  col-lg-height col-top">
     <div class="panel panel-default">
@@ -19,9 +19,9 @@
                 <li><a href="#management" data-toggle="tab">Management</a></li>
             </ul>
         </div>
-        <div class="panel-body">
+        <div class="group-panel-body">
             <div class="tab-content">
-                <div class="tab-pane fade in active" id="images">
+                <div class="tab-pane fade in active " id="images">
                     @foreach (var file in Model.files)
                     {
                         var fullPath = "../uploads/" + Path.GetFileName(file.path);
@@ -29,11 +29,11 @@
                         if (file.FileType.Contains("image/"))
                         {
 
-                                <div class="col-md-3 col-sm-4 col-xs-6 file" id="@file.fileId">
-                                    <img href="javascript:void(0)" class="btn-delete" onclick="javascript:deleteFile(this)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
-                                    <a class="fancybox-buttons " data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
-                                </div>
-                               
+                            <div class="col-md-3 col-sm-4 col-xs-6 file" id="@file.fileId">
+                                <img href="javascript:void(0)" class="btn-delete" onclick="javascript:deleteFile(this)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
+                                <a class="fancybox-buttons " data-fancybox-group="button" href="@fullPath"><img src="@thumbPath" alt="" /></a>
+                            </div>
+
 
                         }
                     }
@@ -48,7 +48,7 @@
                             <div class="file" id="@file.fileId">
                                 <img class="btn-delete" onclick="javascript:deleteFile(this)" src='http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png' />
                                 <audio controls>
-                                    <source src='@Url.Content(fullPath)' type=file.FileType>
+                                    <source src='@Url.Content(fullPath)' type="@file.FileType">
                                     Your browser does not support the audio tag.
                                 </audio>
                             </div>
@@ -102,10 +102,15 @@
 
 <div class="col-lg-4 column  col-lg-height col-top">
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Upload Files</strong> <small>Bootstrap files upload</small></div>
+        <div class="panel-heading">
+            <strong>Upload Files</strong>
+        </div>
         <div class="panel-body">
 
             <h4>Select files from your computer</h4>
+            <p>Files formats are limited to images and audio files.
+                Maximum file size is 64MB.
+            </p>
             <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
                 <div class="form-inline">
                     <div class="form-group">
@@ -123,8 +128,8 @@
 
             <!-- Progress Bar -->
             <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                    <span class="sr-only">60% Complete</span>
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+
                 </div>
             </div>
 
@@ -140,318 +145,324 @@
     </div>
 </div>
 <footer class="footer">
-  
-       @{Html.RenderAction("PopulateChat", new { groupID = Model.group.groupID });}
+
+    @{Html.RenderAction("PopulateChat", new { groupID = Model.group.groupID });}
 </footer>
 
 @if (ViewBag.view == "group")
 {
     <script type="text/javascript">
 
-    function removeFile(link){
-        $(link).closest("div.image").remove();
-    }
-    function deleteFile(link) {
-        debugger;
-        var file = $(link).closest("div.file").attr("id");
-
-        var r = confirm("Do you really want to delete whis file? This is ireversible!");
-        if (r == true) {
-            x = $.ajax({
-                url: '@Url.Action("deleteFile")',
-                contentType: 'application/json; charset=utf-8',
-                data: { groupID: @Model.group.groupID, fileId: file },
-                dataType: 'json',
-                success:function (result) {
-                    var div = $("#"+result.fileId);
-                    div.remove();
-
-                }
-
-            });;
-        } else {
-            x = "You pressed Cancel!";
+        function removeFile(link){
+            $(link).closest("div.image").remove();
         }
-    }
-    function insertNewUser() {
-        $.ajax({
-            url: '@Url.Action("AddUserToGroup")',
-            success: function (data) {
-                if ($("div.single-user-wrapper:last").length > 0) {
-                    $(data).insertAfter("div.single-user-wrapper:last");
-                } else {
-                    $(data).insertAfter("a.insert-new-user");
-                }
-            }
-        });
-    }
-
-
-    + function ($) {
-        'use strict';
-
-        // UPLOAD CLASS DEFINITION
-        // ======================
-
-        var dropZone = document.getElementById('drop-zone');
-        var uploadForm = document.getElementById('js-upload-form');
-
-        var startUpload = function (files) {
-            var data = new FormData();
-
-            for (var i = 0; i < files.length; i++) {
-                data.append(files[i].name, files[i]);
-            }
+        function deleteFile(link) {
             debugger;
-            $.ajax({
-                type: "POST",
-                url: "/Group/Upload/?groupID=@Model.group.groupID",
-                contentType: false,
-                processData: false,
-                data: data,
-                success: function (result) {
-                    alert(result);
-                    var files =result;
+            var file = $(link).closest("div.file").attr("id");
 
-                    var htmlToAppend="";
-                    for(i=0;i<files.length;i++){
-                        if(files[i].mime.indexOf("image/")!=-1){
-                            htmlToAppend += '<div class="col-md-3 col-sm-4 col-xs-6 file" id='+files[i].id+'>';
-                            htmlToAppend += '<img href="javascript:void(0)" class="btn-delete" onclick="javascript:deleteFile(this)" src="http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png" />';
-                            htmlToAppend += '<a class="fancybox-buttons " data-fancybox-group="button" href='+"../uploads/" + files[i].fullPath+'><img src='+"../uploads/" + files[i].thumbnailPath+' alt="" /></a></div>';
-                            $('#images').append(htmlToAppend);
-                        }else if(files[i].mime.indexOf("audio/")!=-1){
-                            htmlToAppend += '<div class="file" id='+files[i].id+'>';
-                            htmlToAppend += '<img href="javascript:void(0)" class="btn-delete" onclick="javascript:deleteFile(this)" src="http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png" />';
-                            htmlToAppend += '<audio controls><source src=' +"../uploads/" + files[i].fullPath+' type=' + files[i].mime+'>Your browser does not support the audio tag.</audio></div>';
-                            $('#audio').append(htmlToAppend);
-                        }
+            var r = confirm("Do you really want to delete whis file? This is ireversible!");
+            if (r == true) {
+                x = $.ajax({
+                    url: '@Url.Action("deleteFile")',
+                    contentType: 'application/json; charset=utf-8',
+                    data: { groupID: @Model.group.groupID, fileId: file },
+                    dataType: 'json',
+                    success:function (result) {
+                        var div = $("#"+result.fileId);
+                        div.remove();
+
                     }
-                },
-                error: function () {
-                    alert("There was error uploading files!");
+
+                });;
+            } else {
+                x = "You pressed Cancel!";
+            }
+        }
+        function insertNewUser() {
+            $.ajax({
+                url: '@Url.Action("AddUserToGroup")',
+                success: function (data) {
+                    if ($("div.single-user-wrapper:last").length > 0) {
+                        $(data).insertAfter("div.single-user-wrapper:last");
+                    } else {
+                        $(data).insertAfter("a.insert-new-user");
+                    }
                 }
             });
-        };
-
-
-        uploadForm.addEventListener('submit', function (e) {
-            var uploadFiles = document.getElementById('js-upload-files').files;
-            e.preventDefault()
-
-            startUpload(uploadFiles)
-        })
-
-        dropZone.ondrop = function (e) {
-            e.preventDefault();
-            this.className = 'upload-drop-zone';
-
-            startUpload(e.dataTransfer.files)
         }
 
-        dropZone.ondragover = function () {
-            this.className = 'upload-drop-zone drop';
-            return false;
-        }
 
-        dropZone.ondragleave = function () {
-            this.className = 'upload-drop-zone';
-            return false;
-        }
+        + function ($) {
+            'use strict';
 
-    }(jQuery);
-    $(function () {
-        $('#file_upload').uploadify({
-            'swf': "@Url.Content("~/Scripts/uploadify.swf")",
-            'cancelImg': "~/Scripts/uploadify-cancel.png",
-            'uploader': '@Url.Action("FileUpload", "Group", new { groupID = Model.group.groupID })',
-            'onUploadSuccess': function (file, data, response) {
-                $("#uploaded").append("<img src='" + data + "' alt='Uploaded Image' />");
-            }
-        });
-    });
+            // UPLOAD CLASS DEFINITION
+            // ======================
 
+            var dropZone = document.getElementById('drop-zone');
+            var uploadForm = document.getElementById('js-upload-form');
 
-    $(document).ready(function () {
-        /*
-         *  Simple image gallery. Uses default settings
-         */
+            var startUpload = function (files) {
+                var data = new FormData();
 
-        $('.fancybox').fancybox();
+                for (var i = 0; i < files.length; i++) {
+                    data.append(files[i].name, files[i]);
+                }
+                debugger;
 
-        /*
-         *  Different effects
-         */
+                $.ajax({
+                    type: "POST",
+                    url: "/Group/Upload/?groupID=@Model.group.groupID",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    xhr: function() {  // Custom XMLHttpRequest
+                        var myXhr = $.ajaxSettings.xhr();
+                        if(myXhr.upload){ // Check if upload property exists
+                            myXhr.upload.addEventListener('progress',progressHandlingFunction,    false); // For handling the progress of the upload
+                        }
+                        return myXhr;
+                    },
+                    success: function (result) {
+                        alert(result);
+                        var files =result;
 
-        // Change title type, overlay closing speed
-        $(".fancybox-effects-a").fancybox({
-            helpers: {
-                title: {
-                    type: 'outside'
-                },
-                overlay: {
-                    speedOut: 0
+                        var htmlToAppend="";
+                        for(i=0;i<files.length;i++){
+                            if(files[i].mime.indexOf("image/")!=-1){
+                                htmlToAppend += '<div class="col-md-3 col-sm-4 col-xs-6 file" id='+files[i].id+'>';
+                                htmlToAppend += '<img href="javascript:void(0)" class="btn-delete" onclick="javascript:deleteFile(this)" src="http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png" />';
+                                htmlToAppend += '<a class="fancybox-buttons " data-fancybox-group="button" href='+"../uploads/" + files[i].fullPath+'><img src='+"../uploads/" + files[i].thumbnailPath+' alt="" /></a></div>';
+                                $('#images').append(htmlToAppend);
+                            }else if(files[i].mime.indexOf("audio/")!=-1){
+                                htmlToAppend += '<div class="file" id='+files[i].id+'>';
+                                htmlToAppend += '<img href="javascript:void(0)" class="btn-delete" onclick="javascript:deleteFile(this)" src="http://cdn1.iconfinder.com/data/icons/diagona/icon/16/101.png" />';
+                                htmlToAppend += '<audio controls><source src=' +"../uploads/" + files[i].fullPath+' type=' + files[i].mime+'>Your browser does not support the audio tag.</audio></div>';
+                                $('#audio').append(htmlToAppend);
+                            }
+                        }
+                    },
+                    error: function () {
+                        alert("There was error uploading files!");
+                    }
+                });
+            };
+
+            function progressHandlingFunction(e){
+                if(e.lengthComputable){
+                    $('div.progress-bar').width(100*e.loaded/e.total+"%");
+
                 }
             }
-        });
 
-        // Disable opening and closing animations, change title type
-        $(".fancybox-effects-b").fancybox({
-            openEffect: 'none',
-            closeEffect: 'none',
+            uploadForm.addEventListener('submit', function (e) {
+                var uploadFiles = document.getElementById('js-upload-files').files;
+                e.preventDefault()
 
-            helpers: {
-                title: {
-                    type: 'over'
-                }
+                startUpload(uploadFiles)
+            })
+
+            dropZone.ondrop = function (e) {
+                e.preventDefault();
+                this.className = 'upload-drop-zone';
+
+                startUpload(e.dataTransfer.files)
             }
-        });
 
-        // Set custom style, close if clicked, change title type and overlay color
-        $(".fancybox-effects-c").fancybox({
-            wrapCSS: 'fancybox-custom',
-            closeClick: true,
+            dropZone.ondragover = function () {
+                this.className = 'upload-drop-zone drop';
+                return false;
+            }
 
-            openEffect: 'none',
+            dropZone.ondragleave = function () {
+                this.className = 'upload-drop-zone';
+                return false;
+            }
 
-            helpers: {
-                title: {
-                    type: 'inside'
-                },
-                overlay: {
-                    css: {
-                        'background': 'rgba(238,238,238,0.85)'
+        }(jQuery);
+
+
+
+        $(document).ready(function () {
+            
+            /*
+             *  Simple image gallery. Uses default settings
+             */
+
+            $('.fancybox').fancybox();
+
+            /*
+             *  Different effects
+             */
+
+            // Change title type, overlay closing speed
+            $(".fancybox-effects-a").fancybox({
+                helpers: {
+                    title: {
+                        type: 'outside'
+                    },
+                    overlay: {
+                        speedOut: 0
                     }
                 }
-            }
-        });
+            });
 
-        // Remove padding, set opening and closing animations, close if clicked and disable overlay
-        $(".fancybox-effects-d").fancybox({
-            padding: 0,
-
-            openEffect: 'elastic',
-            openSpeed: 150,
-
-            closeEffect: 'elastic',
-            closeSpeed: 150,
-
-            closeClick: true,
-
-            helpers: {
-                overlay: null
-            }
-        });
-
-        /*
-         *  Button helper. Disable animations, hide close button, change title type and content
-         */
-
-        $('.fancybox-buttons').fancybox({
-            openEffect: 'none',
-            closeEffect: 'none',
-
-            prevEffect: 'none',
-            nextEffect: 'none',
-
-            closeBtn: false,
-
-            helpers: {
-                title: {
-                    type: 'inside'
-                },
-                buttons: {}
-            },
-
-            afterLoad: function () {
-                this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
-            }
-        });
-
-
-        /*
-         *  Thumbnail helper. Disable animations, hide close button, arrows and slide to next gallery item if clicked
-         */
-
-        $('.fancybox-thumbs').fancybox({
-            prevEffect: 'none',
-            nextEffect: 'none',
-
-            closeBtn: false,
-            arrows: false,
-            nextClick: true,
-
-            helpers: {
-                thumbs: {
-                    width: 50,
-                    height: 50
-                }
-            }
-        });
-
-        /*
-         *  Media helper. Group items, disable animations, hide arrows, enable media and button helpers.
-        */
-        $('.fancybox-media')
-            .attr('rel', 'media-gallery')
-            .fancybox({
+            // Disable opening and closing animations, change title type
+            $(".fancybox-effects-b").fancybox({
                 openEffect: 'none',
                 closeEffect: 'none',
+
+                helpers: {
+                    title: {
+                        type: 'over'
+                    }
+                }
+            });
+
+            // Set custom style, close if clicked, change title type and overlay color
+            $(".fancybox-effects-c").fancybox({
+                wrapCSS: 'fancybox-custom',
+                closeClick: true,
+
+                openEffect: 'none',
+
+                helpers: {
+                    title: {
+                        type: 'inside'
+                    },
+                    overlay: {
+                        css: {
+                            'background': 'rgba(238,238,238,0.85)'
+                        }
+                    }
+                }
+            });
+
+            // Remove padding, set opening and closing animations, close if clicked and disable overlay
+            $(".fancybox-effects-d").fancybox({
+                padding: 0,
+
+                openEffect: 'elastic',
+                openSpeed: 150,
+
+                closeEffect: 'elastic',
+                closeSpeed: 150,
+
+                closeClick: true,
+
+                helpers: {
+                    overlay: null
+                }
+            });
+
+            /*
+             *  Button helper. Disable animations, hide close button, change title type and content
+             */
+
+            $('.fancybox-buttons').fancybox({
+                openEffect: 'none',
+                closeEffect: 'none',
+
                 prevEffect: 'none',
                 nextEffect: 'none',
 
-                arrows: false,
+                closeBtn: false,
+
                 helpers: {
-                    media: {},
+                    title: {
+                        type: 'inside'
+                    },
                     buttons: {}
+                },
+
+                afterLoad: function () {
+                    this.title = 'Image ' + (this.index + 1) + ' of ' + this.group.length + (this.title ? ' - ' + this.title : '');
                 }
             });
 
-        /*
-         *  Open manually
-         */
 
-        $("#fancybox-manual-a").click(function () {
-            $.fancybox.open('1_b.jpg');
-        });
+            /*
+             *  Thumbnail helper. Disable animations, hide close button, arrows and slide to next gallery item if clicked
+             */
 
-        $("#fancybox-manual-b").click(function () {
-            $.fancybox.open({
-                href: 'iframe.html',
-                type: 'iframe',
-                padding: 5
-            });
-        });
+            $('.fancybox-thumbs').fancybox({
+                prevEffect: 'none',
+                nextEffect: 'none',
 
-        $("#fancybox-manual-c").click(function () {
-            $.fancybox.open([
-                {
-                    href: '1_b.jpg',
-                    title: 'My title'
-                }, {
-                    href: '2_b.jpg',
-                    title: '2nd title'
-                }, {
-                    href: '3_b.jpg'
-                }
-            ], {
+                closeBtn: false,
+                arrows: false,
+                nextClick: true,
+
                 helpers: {
                     thumbs: {
-                        width: 75,
+                        width: 50,
                         height: 50
                     }
                 }
             });
+
+            /*
+             *  Media helper. Group items, disable animations, hide arrows, enable media and button helpers.
+            */
+            $('.fancybox-media')
+                .attr('rel', 'media-gallery')
+                .fancybox({
+                    openEffect: 'none',
+                    closeEffect: 'none',
+                    prevEffect: 'none',
+                    nextEffect: 'none',
+
+                    arrows: false,
+                    helpers: {
+                        media: {},
+                        buttons: {}
+                    }
+                });
+
+            /*
+             *  Open manually
+             */
+
+            $("#fancybox-manual-a").click(function () {
+                $.fancybox.open('1_b.jpg');
+            });
+
+            $("#fancybox-manual-b").click(function () {
+                $.fancybox.open({
+                    href: 'iframe.html',
+                    type: 'iframe',
+                    padding: 5
+                });
+            });
+
+            $("#fancybox-manual-c").click(function () {
+                $.fancybox.open([
+                    {
+                        href: '1_b.jpg',
+                        title: 'My title'
+                    }, {
+                        href: '2_b.jpg',
+                        title: '2nd title'
+                    }, {
+                        href: '3_b.jpg'
+                    }
+                ], {
+                    helpers: {
+                        thumbs: {
+                            width: 75,
+                            height: 50
+                        }
+                    }
+                });
+            });
+
+
         });
 
 
-    });
 
 
 
-
-
-</script>
+    </script>
 }
 <style type="text/css">
     .fancybox-custom .fancybox-skin {
